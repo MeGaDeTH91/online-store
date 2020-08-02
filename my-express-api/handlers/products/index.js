@@ -1,103 +1,99 @@
-const User = require("./User");
-const TokenBlacklist = require("../tokenBlacklist/TokenBlacklist");
-const jwt = require("../../utils/jwt");
+const Product = require("./Product");
 const { validationResult } = require("express-validator");
-const { cookie } = require("../../config/config");
 
 module.exports = {
   get: {
-    user(req, res, next) {
-      User.findById(req.query.id)
-        .then((user) => res.send(user))
+    allProducts(req, res, next) {
+      Product.find()
+        .lean()
+        .then((products) => res.send(products))
         .catch((err) => res.status(500).send("Error"));
     },
-    logout(req, res, next) {
-      const token = req.cookies[cookie];
-      console.log("-".repeat(35));
-      console.log(token);
-      console.log("-".repeat(35));
-      TokenBlacklist.create({ token })
-        .then(() => {
-          req.user = null;
-          res.clearCookie(cookie).send("Logout successfully!");
-        })
-        .catch(next);
+    product(req, res, next) {
+      Product.findById(req.query.id)
+        .populate("usersFavorite")
+        .populate("productReviews")
+        .lean()
+        .then((product) => res.send(product))
+        .catch((err) => res.status(500).send("Error"));
     },
   },
   post: {
-    login(req, res, next) {
-      const { email, password } = req.body;
-
-      User.findOne({
-        email,
-      })
-        .then((user) => {
-          if (!user) {
-            throw new Error("Invalid credentials!");
-          }
-          return Promise.all([user.passwordsMatch(password), user]);
-        })
-        .then(([match, user]) => {
-          if (!match) {
-            res.status(401).send("Invalid password");
-            return;
-          }
-
-          const token = jwt.createToken(user);
-
-          res
-            .status(201)
-            .cookie(cookie, token, { maxAge: 10800000 })
-            .send(user);
-        })
-        .catch(next);
-    },
-    register(req, res, next) {
+    create(req, res, next) {
       const errors = validationResult(req);
-      const { email, password, rePassword } = req.body;
+      const {
+        title,
+        description,
+        imageUrl,
+        price,
+        quantity,
+        category,
+      } = req.body;
 
       if (!errors.isEmpty()) {
         res.status(401).send(errors.array()[0].msg);
         return;
       }
 
-      if (password !== rePassword) {
-        res.status(401).send("Passwords do not match!");
-        return;
-      }
-
-      User.findOne({ email })
-        .then((currentUser) => {
-          if (currentUser) {
-            res.status(401).send("The given email is already used!");
+      Product.findOne({ title })
+        .then((currentProduct) => {
+          if (currentProduct) {
+            res.status(401).send("The given product is already present!");
             return;
           }
-          return User.create({ email, password });
+          return Product.create({
+            title,
+            description,
+            imageUrl,
+            price,
+            quantity,
+            category,
+          });
         })
-        .then((createdUser) => {
-          return res.send(createdUser);
+        .then((createdProduct) => {
+          return res.send(createdProduct);
         })
         .catch((err) => {
-          res.status(401).send(err.messag);
+          res.status(401).send(err.message);
           return;
         });
     },
   },
   put: {
-    user(req, res, next) {
+    product(req, res, next) {
       const id = req.params.id;
-      const { username, password } = req.body;
-      models.User.update({ _id: id }, { username, password })
-        .then((updatedUser) => res.send(updatedUser))
+
+      const errors = validationResult(req);
+
+      const {
+        title,
+        description,
+        imageUrl,
+        price,
+        quantity,
+        category,
+      } = req.body;
+
+      if (!errors.isEmpty()) {
+        res.status(401).send(errors.array()[0].msg);
+        return;
+      }
+
+      Product.update(
+        { _id: id },
+        { title, description, imageUrl, price, quantity, category }
+      )
+        .then((updatedProduct) => res.send(updatedProduct))
         .catch(next);
     },
   },
 
   delete: {
-    user(req, res, next) {
+    product(req, res, next) {
       const id = req.params.id;
-      models.User.deleteOne({ _id: id })
-        .then((removedUser) => res.send(removedUser))
+
+      Product.deleteOne({ _id: id })
+        .then((removedProduct) => res.send(removedProduct))
         .catch(next);
     },
   },
