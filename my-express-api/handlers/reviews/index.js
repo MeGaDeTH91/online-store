@@ -1,104 +1,66 @@
-const User = require("./User");
-const TokenBlacklist = require("../tokenBlacklist/TokenBlacklist");
-const jwt = require("../../utils/jwt");
+const Review = require("./Review");
+const Product = require("../products/Product");
 const { validationResult } = require("express-validator");
-const { cookie } = require("../../config/config");
 
 module.exports = {
   get: {
-    user(req, res, next) {
-      User.findById(req.query.id)
-        .then((user) => res.send(user))
-        .catch((err) => res.status(500).send("Error"));
-    },
-    logout(req, res, next) {
-      const token = req.cookies[cookie];
-      console.log("-".repeat(35));
-      console.log(token);
-      console.log("-".repeat(35));
-      TokenBlacklist.create({ token })
-        .then(() => {
-          req.user = null;
-          res.clearCookie(cookie).send("Logout successfully!");
+    productReviews(req, res, next) {
+      const playId = req.query.id;
+
+      Product.findById(playId)
+        .populate("productReviews")
+        .lean()
+        .then((product) => {
+          Review.find()
+            .lean()
+            .then((reviews) => {
+              return res.send(reviews);
+            })
+            .catch((err) => res.status(500).send("Error"));
         })
-        .catch(next);
+        .catch((err) => res.status(500).send("Error"));
     },
   },
   post: {
-    login(req, res, next) {
-      const { email, password } = req.body;
+    createReview(req, res, next) {
+      const playId = req.params.id;
+      const { content, stars } = req.body;
 
-      User.findOne({
-        email,
-      })
-        .then((user) => {
-          if (!user) {
-            throw new Error("Invalid credentials!");
-          }
-          return Promise.all([user.passwordsMatch(password), user]);
-        })
-        .then(([match, user]) => {
-          if (!match) {
-            res.status(401).send("Invalid password");
-            return;
-          }
-
-          const token = jwt.createToken(user);
-
-          res
-            .status(201)
-            .cookie(cookie, token, { maxAge: 10800000 })
-            .send(user);
-        })
-        .catch(next);
-    },
-    register(req, res, next) {
       const errors = validationResult(req);
-      const { email, password, rePassword } = req.body;
 
       if (!errors.isEmpty()) {
         res.status(401).send(errors.array()[0].msg);
         return;
       }
 
-      if (password !== rePassword) {
-        res.status(401).send("Passwords do not match!");
-        return;
-      }
+      Product.findById(playId)
+        .lean()
+        .then((fullProduct) => {
+          const product = fullProduct._id;
+          const reviewer = req.user._id;
 
-      User.findOne({ email })
-        .then((currentUser) => {
-          if (currentUser) {
-            res.status(401).send("The given email is already used!");
-            return;
-          }
-          return User.create({ email, password });
-        })
-        .then((createdUser) => {
-          return res.send(createdUser);
+          Review.create({
+            content,
+            stars,
+            reviewer,
+            product,
+          })
+            .then((createdReview) => {
+              return Promise.all([
+                Product.updateOne({ _id: product }, { $push: { posts: createdReview } }),
+                Review.findOne({ _id: createdReview._id }),
+              ]).then(([modifiedObj, reviewObj]) => {
+                res.send(reviewObj);;
+              return res.send(reviewObj);
+            })
+            .catch((err) => {
+              res.status(401).send(err.message);
+              return;
+            });
         })
         .catch((err) => {
-          res.status(401).send(err.messag);
-          return;
+          return res.status(404).send("No such product");
         });
-    },
-  },
-  put: {
-    user(req, res, next) {
-      const id = req.params.id;
-      const { username, password } = req.body;
-      models.User.update({ _id: id }, { username, password })
-        .then((updatedUser) => res.send(updatedUser))
-        .catch(next);
-    },
-  },
-
-  delete: {
-    user(req, res, next) {
-      const id = req.params.id;
-      models.User.deleteOne({ _id: id })
-        .then((removedUser) => res.send(removedUser))
-        .catch(next);
     },
   },
 };

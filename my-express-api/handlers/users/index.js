@@ -6,8 +6,18 @@ const { cookie } = require("../../config/config");
 
 module.exports = {
   get: {
+    allUsers(req, res, next) {
+      User.find()
+        .lean()
+        .then((users) => res.send(users))
+        .catch((err) => res.status(500).send("Error"));
+    },
     user(req, res, next) {
       User.findById(req.query.id)
+        .populate("orders")
+        .populate("favorites")
+        .populate("reviews")
+        .lean()
         .then((user) => res.send(user))
         .catch((err) => res.status(500).send("Error"));
     },
@@ -45,10 +55,7 @@ module.exports = {
 
           const token = jwt.createToken(user);
 
-          res
-            .status(201)
-            .cookie(cookie, token, { maxAge: 10800000 })
-            .send(user);
+          res.header("Authorization", token).send(user);
         })
         .catch(next);
     },
@@ -75,7 +82,7 @@ module.exports = {
           return User.create({ email, password });
         })
         .then((createdUser) => {
-          return res.send(createdUser);
+          res.header("Authorization", token).send(createdUser);
         })
         .catch((err) => {
           res.status(401).send(err.messag);
