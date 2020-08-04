@@ -42,10 +42,11 @@ module.exports = {
           }
 
           const token = jwt.createToken(user);
-
-          res.header("Authorization", token).send(user);
+          return res.header("Authorization", token).send(user);
         })
-        .catch(next);
+        .catch((err) => {
+          return res.status(500).send(err.message);
+        });
     },
     logout(req, res, next) {
       const token = req.cookies[cookie];
@@ -55,64 +56,77 @@ module.exports = {
       TokenBlacklist.create({ token })
         .then(() => {
           req.user = null;
-          res.clearCookie(cookie).send("Logout successfully!");
+          return res.clearCookie(cookie).send("Logout successfully!");
         })
-        .catch(next);
+        .catch((err) => {
+          return res.status(500).send(err.message);
+        });
     },
     register(req, res, next) {
       const errors = validationResult(req);
 
       if (!errors.isEmpty()) {
-        res.status(401).send(errors.array()[0].msg);
-        return;
+        return res.status(401).send(errors.array()[0].msg);
       }
 
-      const { email, password, rePassword } = req.body;
+      const { email, fullName, phone, password, rePassword } = req.body;
 
       if (password !== rePassword) {
-        res.status(401).send("Passwords do not match!");
-        return;
+        return res.status(401).send("Passwords do not match!");
       }
 
       User.findOne({ email })
         .then((currentUser) => {
           if (currentUser) {
-            res.status(401).send("The given email is already used!");
-            return;
+            return res.status(409).send("The given email is already used!");
           }
-          return User.create({ email, password });
+
+          return User.create({ email, fullName, phone, password });
         })
         .then((createdUser) => {
-          res.header("Authorization", token).send(createdUser);
+          const token = jwt.createToken(createdUser);
+          return res.header("Authorization", token).send(createdUser);
         })
         .catch((err) => {
-          res.status(401).send(err.messag);
-          return;
+          return res.status(500).send(err.message);
         });
     },
   },
   put: {
     user(req, res, next) {
-      const id = req.query.id;
-      const { username, password } = req.body;
-      models.User.update({ _id: id }, { username, password })
+      const userId = req.query.id;
+      const { fullName, phone } = req.body;
+
+      User.updateOne({ _id: userId }, { fullName, phone })
         .then((updatedUser) => res.send(updatedUser))
-        .catch(next);
+        .catch((err) => {
+          return res.status(500).send(err.message);
+        });
     },
     changeRole(req, res, next) {
-      const id = req.query.id;
-      const { username, password } = req.body;
-      models.User.update({ _id: id }, { username, password })
-        .then((updatedUser) => res.send(updatedUser))
-        .catch(next);
+      const userId = req.query.id;
+
+      User.findById(userId).then((user) => {
+        if (!user) {
+          Promise.reject(new Error("No such user!"));
+        }
+
+        User.updateOne({ _id: userId }, { isAdministrator: !user.isAdministrator })
+          .then((updatedUser) => res.send(updatedUser))
+          .catch((err) => {
+            return res.status(500).send(err.message);
+          });
+      });
     },
   },
   delete: {
     user(req, res, next) {
       const id = req.query.id;
-      models.User.deleteOne({ _id: id })
+      User.deleteOne({ _id: id })
         .then((removedUser) => res.send(removedUser))
-        .catch(next);
+        .catch((err) => {
+          return res.status(500).send(err.message);
+        });
     },
   },
 };

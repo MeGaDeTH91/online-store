@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const { Schema, model: Model } = mongoose;
 const { String, ObjectId, Boolean } = Schema.Types;
+const bcrypt = require("bcrypt");
+const saltRounds = 11;
 
 const userSchema = new Schema({
   email: {
@@ -8,11 +10,7 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
-  firstName: {
-    type: String,
-    required: true,
-  },
-  lastName: {
+  fullName: {
     type: String,
     required: true,
   },
@@ -25,7 +23,6 @@ const userSchema = new Schema({
   },
   isAdministrator: {
     type: Boolean,
-    required: true,
     default: false,
   },
   orders: [
@@ -46,6 +43,31 @@ const userSchema = new Schema({
       ref: "Review",
     },
   ],
+});
+
+userSchema.methods = {
+  passwordsMatch(password) {
+    return bcrypt.compare(password, this.password);
+  },
+};
+
+userSchema.pre("save", function (next) {
+  if (this.isModified("password")) {
+    bcrypt.genSalt(saltRounds, (err, salt) => {
+      if (err) {
+        return next(err);
+      }
+      hashedPass = bcrypt.hash(this.password, salt, (err, hashedPass) => {
+        if (err) {
+          return next(err);
+        }
+        this.password = hashedPass;
+        next();
+      });
+    });
+    return;
+  }
+  next();
 });
 
 module.exports = new Model("User", userSchema);

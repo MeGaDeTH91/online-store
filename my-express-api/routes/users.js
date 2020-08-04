@@ -10,10 +10,10 @@ router.get("/user", handler.get.user);
 
 router.post("/login", guestAccess(), handler.post.login);
 router.post("/logout", authenticate(), handler.post.logout);
-router.post("/register", userValidation, handler.post.register);
+router.post("/register", guestAccess(), userValidation, handler.post.register);
 
-router.put("/changeRole", authorizeAdmin(), handler.put.changeRole);
-router.put("/user", userValidation, handler.put.user);
+router.put("/changeRole", authorizeAdmin, handler.put.user);
+router.put("/user", authenticate(), userValidation, handler.put.user);
 router.delete("/user", authenticate(), handler.delete.user);
 
 module.exports = router;

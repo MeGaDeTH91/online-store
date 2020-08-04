@@ -4,7 +4,7 @@ module.exports = {
   userValidation: [
     body("email", "Invalid email provided.").isEmail(),
     body("password", "Password should be at least 6 characters.").isLength({
-      min: 6,
+      min: 2,
     }),
   ],
   productValidation: [
