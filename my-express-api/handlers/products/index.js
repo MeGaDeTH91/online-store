@@ -14,13 +14,23 @@ module.exports = {
         .populate("usersFavorite")
         .populate("productReviews")
         .lean()
-        .then((product) => res.send(product))
+        .then((product) => {
+          if (product) {
+            return res.send(product);
+          }
+          return res.status(404).send("No such product!");
+        })
         .catch((err) => res.status(500).send("Error"));
     },
   },
   post: {
     create(req, res, next) {
       const errors = validationResult(req);
+
+      if (!errors.isEmpty()) {
+        return res.status(401).send(errors.array()[0].msg);
+      }
+
       const {
         title,
         description,
@@ -30,18 +40,13 @@ module.exports = {
         category,
       } = req.body;
 
-      if (!errors.isEmpty()) {
-        res.status(401).send(errors.array()[0].msg);
-        return;
-      }
-
       Product.findOne({ title })
         .then((currentProduct) => {
           if (currentProduct) {
-            res.status(401).send("The given product is already present!");
-            return;
+            return res.status(401).send("The given product already exists!");
           }
-          return Product.create({
+
+          Product.create({
             title,
             description,
             imageUrl,
@@ -54,14 +59,13 @@ module.exports = {
           return res.send(createdProduct);
         })
         .catch((err) => {
-          res.status(401).send(err.message);
-          return;
+          return res.status(500).send(err.message);
         });
     },
   },
   put: {
     product(req, res, next) {
-      const id = req.params.id;
+      const id = req.query.id;
 
       const errors = validationResult(req);
 

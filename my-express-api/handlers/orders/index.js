@@ -1,104 +1,89 @@
-const User = require("./User");
-const TokenBlacklist = require("../tokenBlacklist/TokenBlacklist");
-const jwt = require("../../utils/jwt");
-const { validationResult } = require("express-validator");
-const { cookie } = require("../../config/config");
+const User = require("../users/User");
+const Order = require("./Order");
+const Product = require("../products/Product");
 
 module.exports = {
   get: {
-    user(req, res, next) {
-      User.findById(req.query.id)
-        .then((user) => res.send(user))
-        .catch((err) => res.status(500).send("Error"));
-    },
-    logout(req, res, next) {
-      const token = req.cookies[cookie];
-      console.log("-".repeat(35));
-      console.log(token);
-      console.log("-".repeat(35));
-      TokenBlacklist.create({ token })
-        .then(() => {
-          req.user = null;
-          res.clearCookie(cookie).send("Logout successfully!");
+    userCart(req, res, next) {
+      const userId = req.query.id;
+
+      User.findById(userId)
+        .populate("cart")
+        .lean()
+        .then((user) => {
+          if (user) {
+            return res.send(user.cart);
+          }
+          return res.status(404).send("No such user!");
         })
-        .catch(next);
+        .catch((err) => res.status(500).send(err.message));
+    },
+    userOrders(req, res, next) {
+      const userId = req.query.id;
+
+      User.findById(userId)
+        .populate("orders")
+        .lean()
+        .then((user) => {
+          if (user) {
+            return res.send(user.orders);
+          }
+          return res.status(404).send("No such user!");
+        })
+        .catch((err) => res.status(500).send(err.message));
     },
   },
   post: {
-    login(req, res, next) {
-      const { email, password } = req.body;
+    createOrder(req, res, next) {
+      const userId = req.user._id;
 
-      User.findOne({
-        email,
-      })
+      User.findById(userId)
+        .populate("cart")
+        .populate("orders")
         .then((user) => {
           if (!user) {
-            throw new Error("Invalid credentials!");
-          }
-          return Promise.all([user.passwordsMatch(password), user]);
-        })
-        .then(([match, user]) => {
-          if (!match) {
-            res.status(401).send("Invalid password");
-            return;
+            Promise.reject(new Error("No such user!"));
           }
 
-          const token = jwt.createToken(user);
-
-          res
-            .status(201)
-            .cookie(cookie, token, { maxAge: 10800000 })
-            .send(user);
-        })
-        .catch(next);
-    },
-    register(req, res, next) {
-      const errors = validationResult(req);
-      const { email, password, rePassword } = req.body;
-
-      if (!errors.isEmpty()) {
-        res.status(401).send(errors.array()[0].msg);
-        return;
-      }
-
-      if (password !== rePassword) {
-        res.status(401).send("Passwords do not match!");
-        return;
-      }
-
-      User.findOne({ email })
-        .then((currentUser) => {
-          if (currentUser) {
-            res.status(401).send("The given email is already used!");
-            return;
+          if (!user.cart) {
+            Promise.reject(new Error("No products in shopping cart!"));
           }
-          return User.create({ email, password });
-        })
-        .then((createdUser) => {
-          return res.send(createdUser);
-        })
-        .catch((err) => {
-          res.status(401).send(err.messag);
-          return;
-        });
-    },
-  },
-  put: {
-    user(req, res, next) {
-      const id = req.params.id;
-      const { username, password } = req.body;
-      models.User.update({ _id: id }, { username, password })
-        .then((updatedUser) => res.send(updatedUser))
-        .catch(next);
-    },
-  },
 
-  delete: {
-    user(req, res, next) {
-      const id = req.params.id;
-      models.User.deleteOne({ _id: id })
-        .then((removedUser) => res.send(removedUser))
-        .catch(next);
+          const createdAt = (new Date() + "").slice(0, 24);
+
+          Order.create({
+            createdAt,
+            buyer: userId,
+            products: user.cart,
+          }).then((order) => {
+            user.cart.forEach((productId) => {
+              Product.updateOne({ _id: productId }, { $inc: { quantity: -1 } });
+              return res.status(200).send(order);
+            });
+          });
+        })
+        .catch((err) => res.status(500).send(err.message));
+    },
+    addToCart(req, res, next) {
+      const productId = req.query.id;
+      const userId = req.user._id;
+
+      User.findById(userId)
+        .populate("cart")
+        .then((user) => {
+          if (!user) {
+            Promise.reject(new Error("No such user!"));
+          }
+
+          Product.findById(productId)
+            .then((product) => {
+              User.updateOne({ _id: userId }, { $push: { cart: product } });
+
+              return res.status(200).send(user);
+            })
+            .catch((err) => res.status(500).send(err.message));
+        })
+        .catch((err) => res.status(500).send(err.message));
     },
   },
 };

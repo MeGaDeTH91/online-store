@@ -14,8 +14,12 @@ module.exports = (justContinue = false) => {
         }
 
         User.findById(data.id).then((user) => {
+          if (!user) {
+            return Promise.reject(new Error("No such user!"));
+          }
+
           if (!user.isAdministrator) {
-            return Promise.reject(new Error("user not administrator"));
+            return Promise.reject(new Error("User not administrator"));
           }
 
           req.user = user;

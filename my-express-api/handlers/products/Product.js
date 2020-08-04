@@ -28,12 +28,6 @@ const productSchema = new Schema({
     type: ObjectId,
     ref: "Category",
   },
-  usersFavorite: [
-    {
-      type: ObjectId,
-      ref: "User",
-    },
-  ],
   productReviews: [
     {
       type: ObjectId,

@@ -11,21 +11,16 @@ module.exports = {
         .populate("productReviews")
         .lean()
         .then((product) => {
-          Review.find()
-            .lean()
-            .then((reviews) => {
-              return res.send(reviews);
-            })
-            .catch((err) => res.status(500).send("Error"));
+          if (product) {
+            return res.send(product.productReviews);
+          }
+          return res.status(404).send("No such product!");
         })
-        .catch((err) => res.status(500).send("Error"));
+        .catch((err) => res.status(500).send(err.message));
     },
   },
   post: {
     createReview(req, res, next) {
-      const playId = req.params.id;
-      const { content, stars } = req.body;
-
       const errors = validationResult(req);
 
       if (!errors.isEmpty()) {
@@ -33,33 +28,42 @@ module.exports = {
         return;
       }
 
+      const playId = req.query.id;
+      const { content, stars } = req.body;
+
       Product.findById(playId)
         .lean()
         .then((fullProduct) => {
-          const product = fullProduct._id;
-          const reviewer = req.user._id;
+          if (fullProduct) {
+            const product = playId;
+            const reviewer = req.user._id;
 
-          Review.create({
-            content,
-            stars,
-            reviewer,
-            product,
-          })
-            .then((createdReview) => {
-              return Promise.all([
-                Product.updateOne({ _id: product }, { $push: { posts: createdReview } }),
-                Review.findOne({ _id: createdReview._id }),
-              ]).then(([modifiedObj, reviewObj]) => {
-                res.send(reviewObj);;
-              return res.send(reviewObj);
+            Review.create({
+              content,
+              stars,
+              reviewer,
+              product,
             })
-            .catch((err) => {
-              res.status(401).send(err.message);
-              return;
-            });
+              .then((review) => {
+                return Promise.resolve(
+                  Product.updateOne(
+                    { _id: product },
+                    { $push: { productReviews: review } }
+                  )
+                );
+              })
+              .then((product) => {
+                return res.send(product);
+              })
+              .catch((err) => {
+                return res.status(401).send(err.message);
+              });
+          }
+
+          return res.status(404).send("No such product!");
         })
         .catch((err) => {
-          return res.status(404).send("No such product");
+          return res.status(500).send(err.message);
         });
     },
   },

@@ -10,7 +10,7 @@ module.exports = {
       User.find()
         .lean()
         .then((users) => res.send(users))
-        .catch((err) => res.status(500).send("Error"));
+        .catch((err) => res.status(500).send(err.message));
     },
     user(req, res, next) {
       User.findById(req.query.id)
@@ -19,19 +19,7 @@ module.exports = {
         .populate("reviews")
         .lean()
         .then((user) => res.send(user))
-        .catch((err) => res.status(500).send("Error"));
-    },
-    logout(req, res, next) {
-      const token = req.cookies[cookie];
-      console.log("-".repeat(35));
-      console.log(token);
-      console.log("-".repeat(35));
-      TokenBlacklist.create({ token })
-        .then(() => {
-          req.user = null;
-          res.clearCookie(cookie).send("Logout successfully!");
-        })
-        .catch(next);
+        .catch((err) => res.status(500).send(err.message));
     },
   },
   post: {
@@ -59,14 +47,27 @@ module.exports = {
         })
         .catch(next);
     },
+    logout(req, res, next) {
+      const token = req.cookies[cookie];
+      console.log("-".repeat(35));
+      console.log(token);
+      console.log("-".repeat(35));
+      TokenBlacklist.create({ token })
+        .then(() => {
+          req.user = null;
+          res.clearCookie(cookie).send("Logout successfully!");
+        })
+        .catch(next);
+    },
     register(req, res, next) {
       const errors = validationResult(req);
-      const { email, password, rePassword } = req.body;
 
       if (!errors.isEmpty()) {
         res.status(401).send(errors.array()[0].msg);
         return;
       }
+
+      const { email, password, rePassword } = req.body;
 
       if (password !== rePassword) {
         res.status(401).send("Passwords do not match!");
@@ -92,17 +93,23 @@ module.exports = {
   },
   put: {
     user(req, res, next) {
-      const id = req.params.id;
+      const id = req.query.id;
+      const { username, password } = req.body;
+      models.User.update({ _id: id }, { username, password })
+        .then((updatedUser) => res.send(updatedUser))
+        .catch(next);
+    },
+    changeRole(req, res, next) {
+      const id = req.query.id;
       const { username, password } = req.body;
       models.User.update({ _id: id }, { username, password })
         .then((updatedUser) => res.send(updatedUser))
         .catch(next);
     },
   },
-
   delete: {
     user(req, res, next) {
-      const id = req.params.id;
+      const id = req.query.id;
       models.User.deleteOne({ _id: id })
         .then((removedUser) => res.send(removedUser))
         .catch(next);

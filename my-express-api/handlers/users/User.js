@@ -34,7 +34,7 @@ const userSchema = new Schema({
       ref: "Order",
     },
   ],
-  favorites: [
+  cart: [
     {
       type: ObjectId,
       ref: "Product",

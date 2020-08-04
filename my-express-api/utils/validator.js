@@ -7,7 +7,13 @@ module.exports = {
       min: 6,
     }),
   ],
-  trippValidations: [
+  productValidation: [
+
+  ],
+  reviewValidator: [
+    
+  ],
+  categoryValidation: [
     body(
       "startAndEndPoint",
       'The Startpoint - Endpoint input field should include " - " and be at least 11 characters.'
