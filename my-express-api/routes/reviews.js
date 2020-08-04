@@ -5,6 +5,6 @@ const authenticate = require("../utils/authenticate");
 
 router.get("/productReviews", handler.get.productReviews);
 
-router.post("/createReview", authenticate(), reviewValidator, handler.post.createReview);
+router.post("/createReview", reviewValidator, handler.post.createReview);
 
 module.exports = router;

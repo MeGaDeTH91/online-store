@@ -31,21 +31,20 @@ module.exports = {
       })
         .then((user) => {
           if (!user) {
-            throw new Error("Invalid credentials!");
+            return Promise.reject(new Error("Invalid credentials!"));
           }
           return Promise.all([user.passwordsMatch(password), user]);
         })
         .then(([match, user]) => {
           if (!match) {
-            res.status(401).send("Invalid password");
-            return;
+            return Promise.reject(new Error("Invalid password!"));
           }
 
           const token = jwt.createToken(user);
           return res.header("Authorization", token).send(user);
         })
         .catch((err) => {
-          return res.status(500).send(err.message);
+          return res.status(401).send(err.message);
         });
     },
     logout(req, res, next) {
@@ -78,7 +77,7 @@ module.exports = {
       User.findOne({ email })
         .then((currentUser) => {
           if (currentUser) {
-            return res.status(409).send("The given email is already used!");
+            return Promise.reject(new Error("The given email already exists!"));
           }
 
           return User.create({ email, fullName, phone, password });
@@ -88,7 +87,7 @@ module.exports = {
           return res.header("Authorization", token).send(createdUser);
         })
         .catch((err) => {
-          return res.status(500).send(err.message);
+          return res.status(409).send(err.message);
         });
     },
   },

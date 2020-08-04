@@ -1,5 +1,7 @@
 const Product = require("./Product");
 const { validationResult } = require("express-validator");
+const Category = require("../categories/Category");
+const { ObjectId } = require("mongoose");
 
 module.exports = {
   get: {
@@ -18,9 +20,9 @@ module.exports = {
           if (product) {
             return res.send(product);
           }
-          return res.status(404).send("No such product!");
+          return Promise.reject(new Error("Product not found!"));
         })
-        .catch((err) => res.status(500).send("Error"));
+        .catch((err) => res.status(404).send("Product not found!"));
     },
   },
   post: {
@@ -34,7 +36,7 @@ module.exports = {
       const {
         title,
         description,
-        imageUrl,
+        imageURL,
         price,
         quantity,
         category,
@@ -43,23 +45,36 @@ module.exports = {
       Product.findOne({ title })
         .then((currentProduct) => {
           if (currentProduct) {
-            return res.status(401).send("The given product already exists!");
+            return Promise.reject(
+              new Error("The given product already exists!")
+            );
           }
 
-          Product.create({
+          return Product.create({
             title,
             description,
-            imageUrl,
+            imageURL,
             price,
             quantity,
             category,
           });
         })
         .then((createdProduct) => {
-          return res.send(createdProduct);
+          if (!createdProduct) {
+            return Promise.reject(
+              new Error("Product was not created successfully!")
+            );
+          }
+
+          Category.updateOne(
+            { _id: category },
+            { $push: { products: createdProduct._id } }
+          ).then((category) => {
+            return res.status(200).send(createdProduct);
+          });
         })
         .catch((err) => {
-          return res.status(500).send(err.message);
+          return res.status(401).send(err.message);
         });
     },
   },
@@ -72,33 +87,36 @@ module.exports = {
       const {
         title,
         description,
-        imageUrl,
+        imageURL,
         price,
         quantity,
         category,
       } = req.body;
 
       if (!errors.isEmpty()) {
-        res.status(401).send(errors.array()[0].msg);
-        return;
+        return res.status(401).send(errors.array()[0].msg);
       }
 
-      Product.update(
+      Product.updateOne(
         { _id: id },
-        { title, description, imageUrl, price, quantity, category }
+        { title, description, imageURL, price, quantity, category }
       )
         .then((updatedProduct) => res.send(updatedProduct))
-        .catch(next);
+        .catch((err) => {
+          return res.status(401).send(err.message);
+        });
     },
   },
 
   delete: {
     product(req, res, next) {
-      const id = req.params.id;
+      const id = req.query.id;
 
       Product.deleteOne({ _id: id })
         .then((removedProduct) => res.send(removedProduct))
-        .catch(next);
+        .catch((err) => {
+          return res.status(401).send(err.message);
+        });
     },
   },
 };

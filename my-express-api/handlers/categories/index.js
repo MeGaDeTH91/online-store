@@ -9,7 +9,7 @@ module.exports = {
         .then((categories) => res.send(categories))
         .catch((err) => res.status(500).send(err.message));
     },
-    cagegory(req, res, next) {
+    category(req, res, next) {
       Category.findById(req.query.id)
         .populate("products")
         .lean()
@@ -17,7 +17,7 @@ module.exports = {
           if (category) {
             return res.send(category);
           }
-          return res.status(404).send("No such category!");
+          return Promise.reject(new Error("No such category!"));
         })
         .catch((err) => res.status(500).send(err.message));
     },
@@ -37,11 +37,12 @@ module.exports = {
       })
         .then((category) => {
           if (category) {
-            Promise.reject("Category already exists!");
+            return Promise.reject(new Error("Category already exists!"));
           }
-          return Category.create({ title });
+          Category.create({ title })
+          .then(category => res.status(200).send(category));
         })
-        .catch(next);
+        .catch((err) => res.status(408).send(err.message));
     },
   },
 };
