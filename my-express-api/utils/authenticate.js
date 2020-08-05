@@ -1,11 +1,10 @@
 const jwt = require("./jwt");
 const User = require("../handlers/users/User");
 const TokenBlacklist = require("../handlers/tokenBlacklist/TokenBlacklist");
-const { cookie } = require("../config/config");
 
 module.exports = (justContinue = false) => {
   return function (req, res, next) {
-    const token = req.cookies[cookie] || "";
+    const token = req.headers.authorization || "";
 
     Promise.all([jwt.verifyToken(token), TokenBlacklist.findOne({ token })])
       .then(([data, blacklistToken]) => {

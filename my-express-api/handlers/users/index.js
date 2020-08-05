@@ -21,6 +21,40 @@ module.exports = {
         .then((user) => res.send(user))
         .catch((err) => res.status(500).send(err.message));
     },
+    verifyLogin(req, res, next) {
+      const token = req.headers.authorization || "";
+
+      console.log(token)
+
+      Promise.all([jwt.verifyToken(token), TokenBlacklist.findOne({ token })])
+        .then(([data, blacklistToken]) => {
+          if (blacklistToken) {
+            return Promise.reject(new Error("blacklisted token"));
+          }
+
+          User.findById(data.id).then((user) => {
+            return res.send({
+              status: true,
+              user,
+            });
+          });
+        })
+        .catch((err) => {
+          if (
+            [
+              "token expired",
+              "blacklisted token",
+              "jwt must be provided",
+            ].includes(err.message)
+          ) {
+            return res.status(401).send("UNAUTHORIZED!");
+          }
+
+          return res.send({
+            status: false,
+          });
+        });
+    },
   },
   post: {
     login(req, res, next) {
@@ -110,7 +144,10 @@ module.exports = {
           Promise.reject(new Error("No such user!"));
         }
 
-        User.updateOne({ _id: userId }, { isAdministrator: !user.isAdministrator })
+        User.updateOne(
+          { _id: userId },
+          { isAdministrator: !user.isAdministrator }
+        )
           .then((updatedUser) => res.send(updatedUser))
           .catch((err) => {
             return res.status(500).send(err.message);
