@@ -1,26 +1,74 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import UserContext from "./Context";
+import getCookie from "./utils/getCookie";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = (props) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const logIn = (user) => {
+    setUser({
+      ...user,
+      loggedIn: true,
+    });
+  };
+
+  const logOut = () => {
+    document.cookie = "x-auth-token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+
+    setUser({
+      loggedIn: false
+    });
+  };
+
+  useEffect(() => {
+    const token = getCookie('x-auth-token');
+
+    if (!token) {
+      logOut();
+      setLoading(false);
+      return;
+    }
+    fetch('http://localhost:9999/api/user/verify', {
+      method: 'POST',
+      body: JSON.stringify({
+        token
+      }),
+      headers:{
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
+    }).then(promise => {
+      return promise.json();
+    }).then(response => {
+      if (response.status) {
+        logIn({
+          username: response.user.username,
+          id: response.user._id
+        })
+      } else {
+        logOut();
+      }
+
+      setLoading(false);
+    })
+  }, [])
+
+    if (loading) {
+      return <div>Loading...</div>
+    }
+
+    return (
+      <UserContext.Provider
+        value={{
+          user,
+          logIn,
+          logOut,
+        }}
+      >
+        {props.children}
+      </UserContext.Provider>
+    );
 }
 
 export default App;
