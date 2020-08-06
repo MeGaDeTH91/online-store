@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect, useCallback } from "react";
 import PageLayout from "../../components/page-layout";
 import styled from "styled-components";
-import Origami from "../../components/origami";
 import UserContext from "../../Context";
 import { useParams, useHistory } from "react-router-dom";
 
@@ -50,7 +49,7 @@ const ProfilePage = () => {
         <p>Posts: {posts}</p>
         <button onClick={logOut}>Logout</button>
       </div>
-      <Origami length={3} />
+      {/* <Origami length={3} /> */}
       </ProfileDiv>
     </PageLayout>
   );

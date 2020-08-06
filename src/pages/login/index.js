@@ -8,7 +8,7 @@ import UserContext from "../../Context";
 import { useHistory } from "react-router-dom";
 
 const LoginPage = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const context = useContext(UserContext);
   const history = useHistory();
@@ -16,12 +16,12 @@ const LoginPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!username || !password) {
+    if (!email || !password) {
       return;
     }
 
-    await authenticate("http://localhost:9999/api/user/login", {
-        username,
+    await authenticate("http://localhost:8000/api/users/login", {
+        email,
         password,
       }, (user) => {
         console.log("Logged in successfully!");
@@ -39,11 +39,12 @@ const LoginPage = () => {
     <PageLayout>
       <LoginForm onSubmit={handleSubmit}>
         <Title title="Login page" />
+        <hr />
         <Input
           id="username"
-          value={username}
+          value={email}
           label="Username"
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
         ></Input>
         <Input
           type="password"

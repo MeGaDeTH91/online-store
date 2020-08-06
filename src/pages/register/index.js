@@ -27,7 +27,7 @@ const RegisterPage = () => {
     }
 
     await authenticate(
-      "http://localhost:9999/api/user/register",
+      "http://localhost:8000/api/users/register",
       {
         username,
         password,

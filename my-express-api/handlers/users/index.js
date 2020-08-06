@@ -24,8 +24,6 @@ module.exports = {
     verifyLogin(req, res, next) {
       const token = req.headers.authorization || "";
 
-      console.log(token)
-
       Promise.all([jwt.verifyToken(token), TokenBlacklist.findOne({ token })])
         .then(([data, blacklistToken]) => {
           if (blacklistToken) {
@@ -71,10 +69,10 @@ module.exports = {
         })
         .then(([match, user]) => {
           if (!match) {
-            return Promise.reject(new Error("Invalid password!"));
+            return Promise.reject(new Error("Invalid credentials!"));
           }
 
-          const token = jwt.createToken(user);
+          const token = jwt.createToken({ id: user._id});
           return res.header("Authorization", token).send(user);
         })
         .catch((err) => {
@@ -117,7 +115,7 @@ module.exports = {
           return User.create({ email, fullName, phone, password });
         })
         .then((createdUser) => {
-          const token = jwt.createToken(createdUser);
+          const token = jwt.createToken({ id: createdUser._id});
           return res.header("Authorization", token).send(createdUser);
         })
         .catch((err) => {

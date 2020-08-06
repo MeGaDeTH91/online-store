@@ -7,6 +7,7 @@ const guestAccess = require("../utils/guestAccess");
 
 router.get("/allUsers", authorizeAdmin(), handler.get.allUsers);
 router.get("/user", handler.get.user);
+router.get("/verify", handler.get.verifyLogin);
 
 router.post("/login", guestAccess(), handler.post.login);
 router.post("/logout", authenticate(), handler.post.logout);

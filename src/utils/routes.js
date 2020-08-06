@@ -1,23 +1,66 @@
 const getNavigationRoutes = (user) => {
-  const authLinks = [
+  const adminLinks = [
     {
-      title: "Publications",
+      title: "Products",
       link: "/",
     },
     {
-      title: "Share thoughts",
-      link: "/share",
+      title: "Users",
+      link: "/users",
+    },
+    {
+      title: "Add Product",
+      link: "/products/add",
+    },
+    {
+      title: "Add Category",
+      link: "/categories/add",
     },
     {
       title: "Profile",
       link: `/profile/${user && user.id}`,
     },
+    {
+      title: "ShoppingCart",
+      link: `/cart/${user && user.id}`,
+    },
+    {
+      title: "Logout",
+      link: `/logout`,
+    },
+  ];
+
+  const authLinks = [
+    {
+      title: "Products",
+      link: "/",
+    },
+    {
+      title: "Products by categories",
+      link: "/categories/all",
+    },
+    {
+      title: "Profile",
+      link: `/profile/${user && user.id}`,
+    },
+    {
+      title: "ShoppingCart",
+      link: `/cart/${user && user.id}`,
+    },
+    {
+      title: "Logout",
+      link: `/logout`,
+    },
   ];
 
   const guestLinks = [
     {
-      title: "Publications",
+      title: "Products",
       link: "/",
+    },
+    {
+      title: "Categories",
+      link: "/categories/all",
     },
     {
       title: "Register",
@@ -29,9 +72,13 @@ const getNavigationRoutes = (user) => {
     },
   ];
 
-  const loggedIn = user && user.loggedIn;
+  if (!user || (user && !user.loggedIn)) {
+    return guestLinks;
+  }
 
-  return loggedIn ? authLinks : guestLinks;
+  const isAdmin = user && user.isAdmin;
+
+  return isAdmin ? adminLinks : authLinks;
 };
 
 export default getNavigationRoutes;

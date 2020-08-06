@@ -7,6 +7,7 @@ import RegisterPage from "./pages/register";
 import LoginPage from "./pages/login";
 import ProfilePage from "./pages/profile";
 import UserContext from "./Context";
+import LogoutPage from "./pages/logout";
 
 const StoreNavigation = () => {
   const context = useContext(UserContext);
@@ -24,6 +25,9 @@ const StoreNavigation = () => {
           </Route>
           <Route exact path="/login">
             {loggedIn ? (<Redirect to="/" />) : (<LoginPage />)}
+          </Route>
+          <Route exact path="/logout">
+            {loggedIn ? (<LogoutPage />) : (<Redirect to="/" />)}
           </Route>
           <Route exact path="/profile/:userId">
             {loggedIn ? (<ProfilePage />) : (<Redirect to="/" />)}

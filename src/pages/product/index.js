@@ -3,7 +3,6 @@ import styled from "styled-components";
 import PageLayout from "../../components/page-layout";
 import Title from "../../components/title";
 import SubmitButton from "../../components/button";
-import Origami from "../../components/origami";
 import getCookie from '../../utils/getCookie';
 
 const ShareThoughtsPage = () => {
@@ -38,7 +37,7 @@ const ShareThoughtsPage = () => {
 
       <div>
         <H2>Last 3 posts on your wall</H2>
-        <Origami length={3} />
+        {/* <Origami length={3} /> */}
       </div>
     </PageLayout>
   );

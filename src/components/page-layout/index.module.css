@@ -1,8 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Indie+Flower&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Miltonian+Tattoo&display=swap');
+
 * {
     margin: 0;
     padding: 0;
-    font-family: 'Indie- Flower', cursive;
+    font-size: medium;
+    font-family: 'Miltonian Tattoo', cursive;
 }
 
 .app {
@@ -11,15 +13,14 @@
 }
 
 .container {
-    margin-top: 8.5%;
-    padding: 0.5%;
-    /* border: 1px solid purple; */
+    text-align: center;
+    margin-top: 3.5%;
     margin-bottom: 0.1%;
 }
 
 .inner-container {
     display: inline-block;
-    width: 83%;
+    width: 88%;
     height: auto;
     /* border:1px solid blue; */
     margin-bottom: 5%;

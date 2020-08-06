@@ -29,11 +29,8 @@ const App = (props) => {
       setLoading(false);
       return;
     }
-    fetch('http://localhost:9999/api/user/verify', {
-      method: 'POST',
-      body: JSON.stringify({
-        token
-      }),
+    fetch('http://localhost:8000/api/users/verify', {
+      method: 'GET',
       headers:{
         'Content-Type': 'application/json',
         'Authorization': token
@@ -42,8 +39,9 @@ const App = (props) => {
       return promise.json();
     }).then(response => {
       if (response.status) {
+        console.log(response);
         logIn({
-          username: response.user.username,
+          email: response.user.email,
           id: response.user._id
         })
       } else {
