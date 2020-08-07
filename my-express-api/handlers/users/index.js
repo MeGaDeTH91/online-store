@@ -87,7 +87,7 @@ module.exports = {
       TokenBlacklist.create({ token })
         .then(() => {
           req.user = null;
-          return res.clearCookie(cookie).send("Logout successfully!");
+          return res.clearCookie(cookie).send("Logged out successfully!");
         })
         .catch((err) => {
           return res.status(500).send(err.message);
@@ -102,6 +102,7 @@ module.exports = {
 
       const { email, fullName, phone, password, rePassword } = req.body;
 
+      
       if (password !== rePassword) {
         return res.status(401).send("Passwords do not match!");
       }

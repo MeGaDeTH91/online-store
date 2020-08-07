@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import PageLayout from "../../components/page-layout";
-import Title from "../../components/title";
-import SubmitButton from "../../components/button";
-import getCookie from '../../utils/getCookie';
+import PageLayout from "../../../components/page-layout";
+import Title from "../../../components/title";
+import SubmitButton from "../../../components/button";
+import getCookie from '../../../utils/getCookie';
 
-const ShareThoughtsPage = () => {
+const CreateProductPage = () => {
   const [publication, setPublication] = useState('');
 
   const handleSubmit = async () => {
@@ -69,4 +69,4 @@ const H2 = styled.h2`
   text-decoration: underline;
 `;
 
-export default ShareThoughtsPage;
+export default CreateProductPage;

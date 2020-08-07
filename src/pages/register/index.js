@@ -8,7 +8,8 @@ import UserContext from "../../Context";
 import { useHistory } from "react-router-dom";
 
 const RegisterPage = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState("");
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
 
@@ -18,7 +19,7 @@ const RegisterPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!username || !password || !rePassword) {
+    if (!email || !fullName || !password || !rePassword) {
       return;
     }
 
@@ -29,8 +30,10 @@ const RegisterPage = () => {
     await authenticate(
       "http://localhost:8000/api/users/register",
       {
-        username,
+        email,
+        fullName,
         password,
+        rePassword
       },
       (user) => {
         console.log("Registered successfully!");
@@ -50,10 +53,16 @@ const RegisterPage = () => {
         <Title title="Register page" />
         <hr />
         <Input
-          id="username"
-          value={username}
-          label="Username"
-          onChange={(e) => setUsername(e.target.value)}
+          id="email"
+          value={email}
+          label="Email"
+          onChange={(e) => setEmail(e.target.value)}
+        ></Input>
+        <Input
+          id="fullName"
+          value={fullName}
+          label="Full Name"
+          onChange={(e) => setFullName(e.target.value)}
         ></Input>
         <Input
           type="password"
