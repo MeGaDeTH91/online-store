@@ -14,7 +14,7 @@ const App = (props) => {
   };
 
   const logOut = () => {
-    document.cookie = "x-auth-token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+    document.cookie = "x-auth-token=; expires = Thu, 01 Jan 1970 00:00:00 GMT; Secure";
 
     setUser({
       loggedIn: false
@@ -39,10 +39,10 @@ const App = (props) => {
       return promise.json();
     }).then(response => {
       if (response.status) {
-        console.log(response);
         logIn({
+          id: response.user._id,
           email: response.user.email,
-          id: response.user._id
+          isAdministrator: response.user.isAdministrator
         })
       } else {
         logOut();

@@ -24,7 +24,7 @@ const InputField = styled.input`
   padding: 1%;
   width: 50%;
   border-radius: 6px;
-  color: #234465;
+  color: #343a40;
 `;
 
 const Label = styled.label`

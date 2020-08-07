@@ -7,7 +7,7 @@ const Title = ({ title }) => {
 
 const TitleStyle = styled.h1`
   text-align: center;
-  color: #234465;
+  color: #17a2b8;
   text-decoration: underline;
   margin-bottom: 2%;
 `;

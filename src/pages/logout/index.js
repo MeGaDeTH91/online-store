@@ -1,11 +1,13 @@
-import React, { useState, useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import UserContext from "../../Context";
 import { Redirect } from "react-router-dom";
 
 const LogoutPage = () => {
   const context = useContext(UserContext);
-
-  context.logOut();
+  
+  useEffect(() => {
+    context.logOut();
+  })
 
   return (
     <Redirect to="/"/>

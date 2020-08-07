@@ -8,9 +8,9 @@ import UserContext from "../../Context";
 import { useHistory } from "react-router-dom";
 
 const RegisterPage = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [rePassword, setRePassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [rePassword, setRePassword] = useState("");
 
   const context = useContext(UserContext);
   const history = useHistory();
@@ -48,6 +48,7 @@ const RegisterPage = () => {
     <PageLayout>
       <RegisterForm onSubmit={handleSubmit}>
         <Title title="Register page" />
+        <hr />
         <Input
           id="username"
           value={username}
@@ -82,8 +83,8 @@ const RegisterForm = styled.form`
   vertical-align: top;
 `;
 const FormButton = styled.button`
-  background-color: #234465;
-  color: white;
+  background-color: #343a40;
+  color: #b817a1;
   padding: 2%;
   width: auto;
   border-radius: 6px;
@@ -95,9 +96,9 @@ const FormButton = styled.button`
   margin-bottom: 2%;
 
   &:hover {
-    background-color: white;
+    background-color: #17a2b8;
     border: 2px solid #234465;
-    color: #234465;
+    color: #b82c17;
     font-style: italic;
   }
 `;

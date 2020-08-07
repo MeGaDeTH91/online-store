@@ -8,8 +8,8 @@ import UserContext from "../../Context";
 import { useHistory } from "react-router-dom";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const context = useContext(UserContext);
   const history = useHistory();
 
@@ -20,10 +20,13 @@ const LoginPage = () => {
       return;
     }
 
-    await authenticate("http://localhost:8000/api/users/login", {
+    await authenticate(
+      "http://localhost:8000/api/users/login",
+      {
         email,
         password,
-      }, (user) => {
+      },
+      (user) => {
         console.log("Logged in successfully!");
 
         context.logIn(user);
@@ -59,16 +62,17 @@ const LoginPage = () => {
       </LoginForm>
     </PageLayout>
   );
-}
+};
 
 const LoginForm = styled.form`
   width: 83%;
   display: inline-block;
   vertical-align: top;
 `;
+
 const FormButton = styled.button`
-  background-color: #234465;
-  color: white;
+  background-color: #343a40;
+  color: #b817a1;
   padding: 2%;
   width: auto;
   border-radius: 6px;
@@ -80,9 +84,9 @@ const FormButton = styled.button`
   margin-bottom: 2%;
 
   &:hover {
-    background-color: white;
+    background-color: #17a2b8;
     border: 2px solid #234465;
-    color: #234465;
+    color: #b82c17;
     font-style: italic;
   }
 `;

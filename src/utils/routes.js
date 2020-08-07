@@ -76,7 +76,7 @@ const getNavigationRoutes = (user) => {
     return guestLinks;
   }
 
-  const isAdmin = user && user.isAdmin;
+  const isAdmin = user && user.isAdministrator;
 
   return isAdmin ? adminLinks : authLinks;
 };

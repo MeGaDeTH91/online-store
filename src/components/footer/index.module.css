@@ -1,16 +1,17 @@
 .container {
     position: fixed;
-    height: 45px;
-    background-color: #2E2E2E;
-    bottom: 0px;
+    height: 50px;
+    margin-top: -50px;
+    background-color: #343a40 !important;
+    bottom: 0;
     left: 0px;
     right: 0px;
     margin-bottom: 0px;
-
 }
 
 .copyright {
     text-align: center;
     color: grey;
-    font-weight: bold;;
+    font-weight: bold;
+    
 }
