@@ -2,7 +2,12 @@ import React from "react";
 import styled from "styled-components";
 
 const Title = ({ title }) => {
-  return <TitleStyle>{title}</TitleStyle>;
+  return (
+    <div>
+      <br />
+      <TitleStyle>{title}</TitleStyle>
+    </div>
+  );
 };
 
 const TitleStyle = styled.h1`

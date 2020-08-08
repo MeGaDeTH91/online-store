@@ -16,6 +16,7 @@ const authenticate = async (url, body, onSuccess, onFailure) => {
     if (response.email && authToken) {
       onSuccess({
         email: response.email,
+        isAdministrator: response.isAdministrator,
         id: response._id,
       });
     } else {

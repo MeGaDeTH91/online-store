@@ -1,7 +1,6 @@
 const Product = require("./Product");
 const { validationResult } = require("express-validator");
 const Category = require("../categories/Category");
-const { ObjectId } = require("mongoose");
 
 module.exports = {
   get: {

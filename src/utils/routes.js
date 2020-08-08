@@ -10,11 +10,11 @@ const getNavigationRoutes = (user) => {
     },
     {
       title: "Add Product",
-      link: "/products/add",
+      link: "/products/create",
     },
     {
       title: "Add Category",
-      link: "/categories/add",
+      link: "/categories/create",
     },
     {
       title: "Profile",
