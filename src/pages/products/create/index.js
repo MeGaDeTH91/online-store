@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import PageLayout from "../../../components/page-layout";
 import Title from "../../../components/title";
 import Input from "../../../components/input";
+import TextArea from "../../../components/textarea";
 import getCookie from "../../../utils/getCookie";
 import UploadButton from "../../../components/upload-button";
 import CategoryDropdown from "../../../components/category-dropdown";
-import { useHistory } from "react-router-dom";
 
 const CreateProductPage = () => {
   const history = useHistory();
@@ -64,6 +65,10 @@ const CreateProductPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!title || !description || !imageURL) {
+      return;
+    }
+
     await fetch("http://localhost:8000/api/products/create", {
       method: "POST",
       body: JSON.stringify({
@@ -102,12 +107,12 @@ const CreateProductPage = () => {
           label="Title"
           onChange={(e) => setTitle(e.target.value)}
         ></Input>
-        <Input
+        <TextArea
           id="description"
           value={description}
           label="Description"
           onChange={(e) => setDescription(e.target.value)}
-        ></Input>
+        ></TextArea>
         <UploadButton
           title="Upload Image"
           id="imageURL"
@@ -140,32 +145,6 @@ const CreateProductPage = () => {
     </PageLayout>
   );
 };
-
-const InputContainer = styled.div`
-  text-align: center;
-  display: inline-block;
-  padding: 0.5%;
-  width: 83%;
-`;
-
-const TextAreaContainer = styled.textarea`
-  width: 40%;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  resize: none;
-  padding: 2%;
-  height: 10vh;
-  font-style: italic;
-  border-radius: 6px;
-  border: 1px solid #234465;
-  color: #234465;
-`;
-
-const H2 = styled.h2`
-  color: #234465;
-  text-decoration: underline;
-`;
 
 const CreateProductForm = styled.form`
   width: 83%;
