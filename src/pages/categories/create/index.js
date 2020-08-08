@@ -1,25 +1,17 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import PageLayout from "../../../components/page-layout";
 import Title from "../../../components/title";
 import Input from "../../../components/input";
-import TextArea from "../../../components/textarea";
 import getCookie from "../../../utils/getCookie";
 import UploadButton from "../../../components/upload-button";
-import CategoryDropdown from "../../../components/category-dropdown";
 
-const CreateProductPage = () => {
+const CreateCategoryPage = () => {
   const history = useHistory();
 
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
   const [imageURL, setImageURL] = useState(null);
-  const [price, setPrice] = useState(0.0);
-  const [quantity, setQuantity] = useState(0);
-  const [categoryTitle, setCategoryTitle] = useState("Choose category");
-  const [category, setCategory] = useState("");
-  const [categories, setCategories] = useState([]);
 
   const openWidget = () => {
     const widget = window.cloudinary.createUploadWidget(
@@ -37,47 +29,18 @@ const CreateProductPage = () => {
     widget.open();
   };
 
-  const getCategories = useCallback(async () => {
-    const response = await fetch(`http://localhost:8000/api/categories/all`);
-
-    if (!response.ok) {
-      history.push("/error");
-    } else {
-      const categories = await response.json();
-
-      if (!categories) {
-        history.push("/error");
-      }
-
-      setCategories(categories);
-    }
-  }, [history]);
-
-  useEffect(() => {
-    getCategories();
-  }, [getCategories]);
-
-  const handleDropdownSelect = (categoryId, e) => {
-    setCategory(categoryId);
-    setCategoryTitle(e.target.textContent);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!title || !description || !imageURL) {
+    if (!title || !imageURL) {
       return;
     }
 
-    await fetch("http://localhost:8000/api/products/create", {
+    await fetch("http://localhost:8000/api/categories/create", {
       method: "POST",
       body: JSON.stringify({
         title,
-        description,
         imageURL,
-        price,
-        quantity,
-        category,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -85,13 +48,13 @@ const CreateProductPage = () => {
       },
     });
 
-    history.push("/");
+    history.push("/categories/all");
   };
 
   return (
     <PageLayout>
       <CreateProductForm onSubmit={handleSubmit}>
-        <Title title="Add product" />
+        <Title title="Add category" />
         <hr />
         {imageURL ? (
           <img
@@ -107,39 +70,14 @@ const CreateProductPage = () => {
           label="Title"
           onChange={(e) => setTitle(e.target.value)}
         ></Input>
-        <TextArea
-          id="description"
-          value={description}
-          label="Description"
-          onChange={(e) => setDescription(e.target.value)}
-        ></TextArea>
         <UploadButton
           title="Upload Image"
           id="imageURL"
           label="Image URL"
           click={openWidget}
         />
-        <Input
-          type="number"
-          id="price"
-          value={price}
-          label="Price"
-          onChange={(e) => setPrice(e.target.value)}
-        ></Input>
-        <Input
-          type="number"
-          id="quantity"
-          value={quantity}
-          label="Quantity"
-          onChange={(e) => setQuantity(e.target.value)}
-        ></Input>
-        <CategoryDropdown
-          title={categoryTitle}
-          categoriesList={categories}
-          handleSelect={handleDropdownSelect}
-        />
         <FormControlDiv>
-          <FormButton type="submit">{"Add product"}</FormButton>
+          <FormButton type="submit">{"Add category"}</FormButton>
         </FormControlDiv>
       </CreateProductForm>
     </PageLayout>
@@ -180,4 +118,4 @@ const FormControlDiv = styled.div`
   text-align: center;
 `;
 
-export default CreateProductPage;
+export default CreateCategoryPage;

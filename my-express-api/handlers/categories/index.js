@@ -30,7 +30,7 @@ module.exports = {
         return res.status(401).send(errors.array()[0].msg);
       }
 
-      const { title } = req.body;
+      const { title, imageURL } = req.body;
 
       Category.findOne({
         title,
@@ -39,7 +39,7 @@ module.exports = {
           if (category) {
             return Promise.reject(new Error("Category already exists!"));
           }
-          Category.create({ title })
+          Category.create({ title, imageURL })
           .then(category => res.status(200).send(category));
         })
         .catch((err) => res.status(408).send(err.message));

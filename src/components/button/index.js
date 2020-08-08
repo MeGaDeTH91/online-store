@@ -3,27 +3,30 @@ import styled from "styled-components";
 
 const SubmitButton = ({ title, onClick }) => {
   return (
-    <Button type="submit" onClick={onClick}>{title}</Button>
-  )
+    <Button type="submit" onClick={onClick}>
+      {title}
+    </Button>
+  );
 };
 
 const Button = styled.button`
-  background-color: #234465;
-  color: white;
-  padding: 1%;
-  width: 7%;
+  background-color: #343a40;
+  color: #b817a1;
+  padding: 2%;
+  width: auto;
   border-radius: 6px;
   display: block;
   margin: 0 auto;
   border: none;
-  margin-top: 0.5%;
+  margin-top: 5.5%;
   border: 2px solid white;
   margin-bottom: 2%;
+  display: inline-block;
 
   &:hover {
-    background-color: white;
+    background-color: #17a2b8;
     border: 2px solid #234465;
-    color: #234465;
+    color: #b82c17;
     font-style: italic;
   }
 `;

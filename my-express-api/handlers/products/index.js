@@ -6,6 +6,7 @@ module.exports = {
   get: {
     allProducts(req, res, next) {
       Product.find()
+        .populate("category")
         .lean()
         .then((products) => res.send(products))
         .catch((err) => res.status(500).send("Error"));

@@ -5,6 +5,10 @@ const getNavigationRoutes = (user) => {
       link: "/",
     },
     {
+      title: "Shop by Category",
+      link: "/categories/all",
+    },
+    {
       title: "Users",
       link: "/users",
     },
@@ -36,7 +40,7 @@ const getNavigationRoutes = (user) => {
       link: "/",
     },
     {
-      title: "Products by categories",
+      title: "Shop by Category",
       link: "/categories/all",
     },
     {
@@ -59,7 +63,7 @@ const getNavigationRoutes = (user) => {
       link: "/",
     },
     {
-      title: "Categories",
+      title: "Shop by Category",
       link: "/categories/all",
     },
     {

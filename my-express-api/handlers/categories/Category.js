@@ -8,6 +8,10 @@ const categorySchema = new Schema({
     required: true,
     unique: true,
   },
+  imageURL: {
+    type: String,
+    required: true,
+  },
   products: [
     {
       type: ObjectId,

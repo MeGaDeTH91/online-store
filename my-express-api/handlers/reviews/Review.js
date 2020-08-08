@@ -7,10 +7,6 @@ const reviewSchema = new Schema({
     type: String,
     required: true,
   },
-  stars: {
-    type: Number,
-    required: true,
-  },
   reviewer: {
     type: ObjectId,
     ref: "User",
