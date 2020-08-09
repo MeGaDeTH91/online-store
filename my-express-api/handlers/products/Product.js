@@ -34,6 +34,6 @@ const productSchema = new Schema({
       ref: "Review",
     },
   ],
-});
+}, { timestamps: { createdAt: 'created_at' } });
 
 module.exports = new Model("Product", productSchema);

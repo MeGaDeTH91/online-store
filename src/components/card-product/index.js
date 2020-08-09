@@ -1,6 +1,6 @@
 import React from "react";
 import TextLink from "../text-link";
-import SubmitButton from "../button";
+import SubmitButton from "../buttons/submit";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
@@ -8,7 +8,7 @@ const CardProduct = ({ productId, imageURL, title, price, category }) => {
   const history = useHistory();
 
   const onDetails = () => {
-    history.push(`/products/product?id=${productId}`);
+    history.push(`/products/product/${productId}`);
   };
 
   return (
@@ -20,7 +20,7 @@ const CardProduct = ({ productId, imageURL, title, price, category }) => {
         <CardParagraph>
           <TextLink
             title={category.title}
-            href={`/categories/category?id=${category._id}`}
+            href={`/categories/category/${category._id}`}
           ></TextLink>
         </CardParagraph>
         <h3>{price}lv.</h3>

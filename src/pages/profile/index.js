@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, useCallback } from "react";
 import PageLayout from "../../components/page-layout";
 import styled from "styled-components";
-import UserContext from "../../Context";
+import UserContext from "../../UserContext";
 import { useParams, useHistory } from "react-router-dom";
 
 const ProfilePage = () => {

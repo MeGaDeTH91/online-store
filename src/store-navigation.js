@@ -7,9 +7,10 @@ import CreateCategoryPage from "./pages/categories/create";
 import RegisterPage from "./pages/register";
 import LoginPage from "./pages/login";
 import ProfilePage from "./pages/profile";
-import UserContext from "./Context";
+import UserContext from "./UserContext";
 import LogoutPage from "./pages/logout";
 import CategoriesPage from "./pages/categories/all";
+import ProductDetailsPage from "./pages/products/details";
 
 const StoreNavigation = () => {
   const context = useContext(UserContext);
@@ -24,13 +25,18 @@ const StoreNavigation = () => {
     <BrowserRouter>
       <Switch>
         <Route exact path="/" component={HomePage} />
+        <Route exact path="/products/product/:id" component={ProductDetailsPage} />
         <Route exact path="/categories/all" component={CategoriesPage} />
+        <Route exact path="/categories/category/:id" component={CategoriesPage} />
 
         <Route exact path="/products/create">
           {authorizationSwitch(admin, <CreateProductPage />, "/")}
         </Route>
         <Route exact path="/categories/create">
           {authorizationSwitch(admin, <CreateCategoryPage />, "/")}
+        </Route>
+        <Route exact path="/users">
+          {authorizationSwitch(admin, <s />, "/")}
         </Route>
 
         <Route exact path="/register">
@@ -43,7 +49,7 @@ const StoreNavigation = () => {
         <Route exact path="/logout">
           {authorizationSwitch(userIsLogged, <LogoutPage />, "/login")}
         </Route>
-        <Route exact path="/profile/:userId">
+        <Route exact path="/profile/:id">
           {authorizationSwitch(userIsLogged, <ProfilePage />, "/login")}
         </Route>
         <Route component={ErrorPage} />

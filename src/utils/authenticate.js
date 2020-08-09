@@ -7,20 +7,21 @@ const authenticate = async (url, body, onSuccess, onFailure) => {
         "Content-Type": "application/json",
       },
     });
-    
+
     const authToken = promise.headers.get("Authorization");
-    document.cookie = `x-auth-token=${authToken}; Secure`;
 
     const response = await promise.json();
 
-    if (response.email && authToken) {
+    if (response.email && response.isActive && authToken) {
+      document.cookie = `x-auth-token=${authToken}; Secure`;
       onSuccess({
         email: response.email,
         isAdministrator: response.isAdministrator,
+        isActive: response.isActive,
         id: response._id,
       });
     } else {
-      onFailure();
+      onFailure("Account is suspended!");
     }
   } catch (error) {
     onFailure(error);

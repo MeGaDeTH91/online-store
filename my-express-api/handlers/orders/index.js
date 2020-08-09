@@ -67,12 +67,15 @@ module.exports = {
         .catch((err) => res.status(500).send(err.message));
     },
     addToCart(req, res, next) {
-      const productId = req.query.id;
-      const userId = req.query.userId;//req.user._id;
+      const productId = req.query.productId;
+      const userId = req.query.userId;
+
+      console.log('ProductId: ', productId);
+      console.log('userId: ', userId);
 
       User.updateOne({ _id: userId }, { $push: { cart: productId } }).then((updatedUser) => {
-        console.log(user);
-        return res.status(200).send(user);
+        console.log(updatedUser);
+        return res.status(200).send(updatedUser);
       });
       
       User.findById(userId)

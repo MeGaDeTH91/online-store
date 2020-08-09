@@ -3,6 +3,7 @@ import PageLayout from "../../components/page-layout";
 import Title from "../../components/title";
 import CardDeckComponent from "../../components/card-deck";
 import CardProduct from "../../components/card-product";
+import formatPrice from '../../utils/priceFormatter';
 
 class HomePage extends Component {
   constructor(props) {
@@ -41,7 +42,7 @@ class HomePage extends Component {
                   productId={x._id}
                   imageURL={x.imageURL}
                   title={x.title}
-                  price={(Math.round(x.price * 100) / 100).toFixed(2)}
+                  price={formatPrice(x.price)}
                   category={x.category}
                 ></CardProduct>
               );

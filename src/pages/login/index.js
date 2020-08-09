@@ -4,19 +4,22 @@ import PageLayout from "../../components/page-layout";
 import Title from "../../components/title";
 import Input from "../../components/input";
 import authenticate from "../../utils/authenticate";
-import UserContext from "../../Context";
+import UserContext from "../../UserContext";
 import { useHistory } from "react-router-dom";
+import NotificationContext from "../../NotificationContext";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const context = useContext(UserContext);
+  const userContext = useContext(UserContext);
+  const notifications = useContext(NotificationContext);
   const history = useHistory();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!email || !password) {
+      notifications.showMessage("Please provide email and password.", 'danger');
       return;
     }
 
@@ -29,11 +32,13 @@ const LoginPage = () => {
       (user) => {
         console.log("Logged in successfully!");
 
-        context.logIn(user);
+        userContext.logIn(user);
+        notifications.showMessage("Logged in successfully!", 'success');
         history.push("/");
       },
       (error) => {
-        console.log("Error", error);
+        notifications.showMessage("Invalid credentials!", 'danger');
+        history.push("/login");
       }
     );
   };
@@ -44,9 +49,9 @@ const LoginPage = () => {
         <Title title="Login page" />
         <hr />
         <Input
-          id="username"
+          id="email"
           value={email}
-          label="Username"
+          label="Email"
           onChange={(e) => setEmail(e.target.value)}
         ></Input>
         <Input

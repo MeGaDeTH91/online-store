@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Navbar, Nav, Form, FormControl, Button } from "react-bootstrap";
 import getNavigationRoutes from "../../utils/routes";
-import UserContext from "../../Context";
+import UserContext from "../../UserContext";
 import styled from "styled-components";
 
 const Header = () => {

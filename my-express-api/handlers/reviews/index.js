@@ -12,7 +12,7 @@ module.exports = {
         .lean()
         .then((product) => {
           if (product) {
-            return res.send(product.productReviews);
+            return res.send(product.productReviews.sort("-created_at"));
           }
           return Promise.reject(new Error("No such product!"));
         })

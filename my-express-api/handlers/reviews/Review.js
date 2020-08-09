@@ -15,6 +15,6 @@ const reviewSchema = new Schema({
     type: ObjectId,
     ref: "Product",
   },
-});
+}, { timestamps: { createdAt: 'created_at' } });
 
 module.exports = new Model("Review", reviewSchema);

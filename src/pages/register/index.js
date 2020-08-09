@@ -4,8 +4,9 @@ import PageLayout from "../../components/page-layout";
 import Title from "../../components/title";
 import Input from "../../components/input";
 import authenticate from "../../utils/authenticate";
-import UserContext from "../../Context";
+import UserContext from "../../UserContext";
 import { useHistory } from "react-router-dom";
+import NotificationContext from "../../NotificationContext";
 
 const RegisterPage = () => {
   const [email, setEmail] = useState("");
@@ -14,16 +15,19 @@ const RegisterPage = () => {
   const [rePassword, setRePassword] = useState("");
 
   const context = useContext(UserContext);
+  const notifications = useContext(NotificationContext);
   const history = useHistory();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!email || !fullName || !password || !rePassword) {
+      notifications.showMessage('Please provide email, full name, password and confirmation password.', 'danger');
       return;
     }
 
     if (password !== rePassword) {
+      notifications.showMessage('Passwords do not match.', 'danger');
       return;
     }
 
@@ -43,6 +47,7 @@ const RegisterPage = () => {
       },
       (error) => {
         console.log("Error", error);
+        notifications.showMessage('Please provide another email.', 'danger');
       }
     );
   };

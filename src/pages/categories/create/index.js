@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import PageLayout from "../../../components/page-layout";
 import Title from "../../../components/title";
 import Input from "../../../components/input";
-import getCookie from "../../../utils/getCookie";
 import UploadButton from "../../../components/upload-button";
+import NotificationContext from "../../../NotificationContext";
+import executeAuthRequest from "../../../utils/executeAuthRequest";
 
 const CreateCategoryPage = () => {
   const history = useHistory();
+  const notifications = useContext(NotificationContext);
 
   const [title, setTitle] = useState("");
   const [imageURL, setImageURL] = useState(null);
@@ -33,20 +35,25 @@ const CreateCategoryPage = () => {
     e.preventDefault();
 
     if (!title || !imageURL) {
+      notifications.showMessage('Please provide product title and upload Image.', 'danger');
       return;
     }
 
-    await fetch("http://localhost:8000/api/categories/create", {
-      method: "POST",
-      body: JSON.stringify({
+    await executeAuthRequest("http://localhost:8000/api/categories/create", 
+      "POST",
+      {
         title,
         imageURL,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: getCookie("x-auth-token"),
+      },(product) => {
+
+        notifications.showMessage("Product created successfully!", 'success');
+        history.push("/");
       },
-    });
+      (error) => {
+        notifications.showMessage("Please provide different product title.", 'danger');
+        history.push("/products/create");
+      }
+    );
 
     history.push("/categories/all");
   };

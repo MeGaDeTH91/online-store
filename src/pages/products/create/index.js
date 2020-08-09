@@ -1,16 +1,18 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import PageLayout from "../../../components/page-layout";
 import Title from "../../../components/title";
 import Input from "../../../components/input";
 import TextArea from "../../../components/textarea";
-import getCookie from "../../../utils/getCookie";
 import UploadButton from "../../../components/upload-button";
 import CategoryDropdown from "../../../components/category-dropdown";
+import NotificationContext from "../../../NotificationContext";
+import executeAuthRequest from "../../../utils/executeAuthRequest";
 
 const CreateProductPage = () => {
   const history = useHistory();
+  const notifications = useContext(NotificationContext);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -41,17 +43,19 @@ const CreateProductPage = () => {
     const response = await fetch(`http://localhost:8000/api/categories/all`);
 
     if (!response.ok) {
+      notifications.showMessage('Error occured.', 'danger');
       history.push("/error");
     } else {
       const categories = await response.json();
 
       if (!categories) {
+        notifications.showMessage('Error occured.', 'danger');
         history.push("/error");
       }
 
       setCategories(categories);
     }
-  }, [history]);
+  }, [history, notifications]);
 
   useEffect(() => {
     getCategories();
@@ -66,24 +70,29 @@ const CreateProductPage = () => {
     e.preventDefault();
 
     if (!title || !description || !imageURL) {
+      notifications.showMessage('Please provide product title, description and upload Image.', 'danger');
       return;
     }
 
-    await fetch("http://localhost:8000/api/products/create", {
-      method: "POST",
-      body: JSON.stringify({
+    await executeAuthRequest("http://localhost:8000/api/products/create", 
+      "POST",
+      {
         title,
         description,
         imageURL,
         price,
         quantity,
         category,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: getCookie("x-auth-token"),
+      },(product) => {
+
+        notifications.showMessage("Product created successfully!", 'success');
+        history.push("/");
       },
-    });
+      (error) => {
+        notifications.showMessage("Please provide different product title.", 'danger');
+        history.push("/products/create");
+      }
+    );
 
     history.push("/");
   };

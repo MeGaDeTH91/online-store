@@ -7,7 +7,7 @@ const CardCategory = ({ categoryId, imageURL, title }) => {
   const history = useHistory();
 
   const onDetails = () => {
-    history.push(`/categories/category?id=${categoryId}`);
+    history.push(`/categories/category/${categoryId}`);
   };
 
   return (

@@ -6,6 +6,7 @@ module.exports = {
   get: {
     allProducts(req, res, next) {
       Product.find()
+        .sort("-created_at")
         .populate("category")
         .lean()
         .then((products) => res.send(products))
