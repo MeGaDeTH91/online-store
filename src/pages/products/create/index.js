@@ -60,7 +60,8 @@ const CreateProductPage = () => {
 
   useEffect(() => {
     getCategories();
-  }, [getCategories]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleDropdownSelect = (categoryId, e) => {
     setCategory(categoryId);
@@ -76,9 +77,9 @@ const CreateProductPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!title || !description || !imageURL) {
+    if (!title || !description || !imageURL || !category) {
       notifications.showMessage(
-        "Please provide product title, description and upload Image.",
+        "Please provide product title, description, upload Image and choose category.",
         "danger"
       );
       return;
@@ -101,14 +102,12 @@ const CreateProductPage = () => {
       },
       (error) => {
         notifications.showMessage(
-          "Please provide different product title.",
+          error,
           "danger"
         );
         history.push("/products/create");
       }
     );
-
-    history.push("/");
   };
 
   return (

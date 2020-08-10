@@ -5,8 +5,8 @@ const authenticate = require("../utils/authenticate");
 const authorizeAdmin = require("../utils/authorizeAdmin");
 const guestAccess = require("../utils/guestAccess");
 
-router.get("/allUsers", authorizeAdmin(), handler.get.allUsers);
-router.get("/user", handler.get.user);
+router.get("/all", authorizeAdmin(), handler.get.allUsers);
+router.get("/user", authenticate(), handler.get.user);
 router.get("/verify", handler.get.verifyLogin);
 
 router.post("/login", guestAccess(), handler.post.login);

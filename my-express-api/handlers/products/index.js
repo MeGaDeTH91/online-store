@@ -96,7 +96,6 @@ module.exports = {
       } = req.body;
 
       if (!errors.isEmpty()) {
-        console.log('HERE: ', errors.array()[0].msg)
         return res.status(401).send(`"${errors.array()[0].msg}"`);
       }
 

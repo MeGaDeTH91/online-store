@@ -45,4 +45,29 @@ module.exports = {
         .catch((err) => res.status(408).send(`"${err.message}"`));
     },
   },
+  put: {
+    category(req, res, next) {
+      const id = req.query.id;
+
+      const errors = validationResult(req);
+
+      const {
+        title,
+        imageURL,
+      } = req.body;
+
+      if (!errors.isEmpty()) {
+        return res.status(401).send(`"${errors.array()[0].msg}"`);
+      }
+
+      Category.updateOne(
+        { _id: id },
+        { title, imageURL }
+      )
+        .then((updatedCategory) => res.send(updatedCategory))
+        .catch((err) => {
+          return res.status(401).send(`"${err.message}"`);
+        });
+    },
+  },
 };

@@ -1,22 +1,41 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import styles from './index.module.css';
+import EditButton from "../buttons/edit";
+import UserContext from "../../UserContext";
 
 const CardCategory = ({ categoryId, imageURL, title }) => {
   const history = useHistory();
+  const context = useContext(UserContext);
+
+  const { user } = context;
+  const userIsAdministrator = user && user.isAdministrator;
 
   const onDetails = () => {
     history.push(`/categories/category/${categoryId}`);
   };
 
+  const editCategory = () => {
+    history.push(`/categories/category-edit/${categoryId}`);
+  };
+
   return (
-    <Card className={styles.thumbnail} onClick={onDetails}>
+    <Card>
+      <div className={styles.thumbnail} onClick={onDetails}>
       <CardImage src={imageURL} alt="Card image cap"></CardImage>
       <CardBody>
         <h4>{ title.length > 21 ? (title) : (<div> {title}<br /><br /></div>)}</h4>
         <hr />
       </CardBody>
+      </div>
+      
+
+      {userIsAdministrator ? (
+        <CardFooter>
+          <EditButton title="Edit Category" onClick={editCategory}></EditButton>
+        </CardFooter>
+      ) : null}
     </Card>
   );
 };
@@ -38,6 +57,17 @@ const Card = styled.div`
   margin-right: 15px;
   margin-bottom: 0;
   margin-left: 50px;
+`;
+
+const CardFooter = styled.div`
+  border-radius: 0 0 calc(0.25rem - 1px) calc(0.25rem - 1px);
+  background-color: #dddddd;
+  color: white;
+  border-top: 1px solid #dddddd;
+  margin: 0;
+  padding: 0;
+  font-size: medium;
+  font-family: "Miltonian Tattoo", cursive;
 `;
 
 const CardImage = styled.img`

@@ -1,5 +1,10 @@
-import React, { useState, useContext } from "react";
-import { useHistory } from "react-router-dom";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useContext,
+} from "react";
+import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import PageLayout from "../../../components/page-layout";
 import Title from "../../../components/title";
@@ -9,8 +14,9 @@ import NotificationContext from "../../../NotificationContext";
 import executeAuthRequest from "../../../utils/executeAuthRequest";
 import SubmitButton from "../../../components/buttons/submit";
 
-const CreateCategoryPage = () => {
+const EditCategoryPage = () => {
   const history = useHistory();
+  const params = useParams();
   const notifications = useContext(NotificationContext);
 
   const [title, setTitle] = useState("");
@@ -32,43 +38,74 @@ const CreateCategoryPage = () => {
     widget.open();
   };
 
+  const getCategory = useCallback(async () => {
+    const response = await fetch(
+      `http://localhost:8000/api/categories/category?id=${params.id}`
+    );
+
+    if (!response.ok) {
+      notifications.showMessage("Invalid categoryId.", "danger");
+      history.push("/");
+    } else {
+      const category = await response.json();
+
+      if (!category) {
+        notifications.showMessage("No such category.", "danger");
+        history.push("/");
+      }
+
+      setTitle(category.title);
+      setImageURL(category.imageURL);
+    }
+  }, [history, notifications, params]);
+
+  useEffect(() => {
+    getCategory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const goBack = (e) => {
     e.preventDefault();
 
     history.goBack();
-  };
-  
+}
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!title || !imageURL) {
-      notifications.showMessage('Please provide category title and upload Image.', 'danger');
+      notifications.showMessage(
+        "Please provide category title or upload Image.",
+        "danger"
+      );
       return;
     }
 
-    await executeAuthRequest("http://localhost:8000/api/categories/create", 
-      "POST",
+    await executeAuthRequest(
+      `http://localhost:8000/api/categories/category?id=${params.id}`,
+      "PUT",
       {
         title,
         imageURL,
-      },(product) => {
-
-        notifications.showMessage("Product created successfully!", 'success');
-        history.push("/");
+      },
+      (product) => {
+        notifications.showMessage("Category changed successfully!", "success");
+        history.push("/categories/all");
       },
       (error) => {
-        notifications.showMessage("Please provide different product title.", 'danger');
-        history.push("/products/create");
+        notifications.showMessage(
+          error,
+          "danger"
+        );
+        history.push(`/categories/category-edit/${params.id}`);
       }
     );
-
-    history.push("/categories/all");
   };
 
   return (
     <PageLayout>
-      <CreateCategoryForm onSubmit={handleSubmit}>
-        <Title title="Add category" />
+      <EditCategoryForm onSubmit={handleSubmit}>
+        <Title title="Edit category" />
         <hr />
         {imageURL ? (
           <img
@@ -90,16 +127,16 @@ const CreateCategoryPage = () => {
           label="Image URL"
           click={openWidget}
         />
-        <SubmitButton title="Add category" goBack={goBack}/>
-      </CreateCategoryForm>
+        <SubmitButton title="Change category" goBack={goBack}/>
+      </EditCategoryForm>
     </PageLayout>
   );
 };
 
-const CreateCategoryForm = styled.form`
+const EditCategoryForm = styled.form`
   width: 83%;
   display: inline-block;
   vertical-align: top;
 `;
 
-export default CreateCategoryPage;
+export default EditCategoryPage;

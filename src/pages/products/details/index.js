@@ -13,6 +13,7 @@ class ProductDetailsPage extends Component {
 
     this.state = {
       product: null,
+      reviews: []
     };
   }
 
@@ -29,6 +30,7 @@ class ProductDetailsPage extends Component {
 
     this.setState({
       product: result,
+      reviews: result.reviews
     });
   };
 
@@ -44,8 +46,11 @@ class ProductDetailsPage extends Component {
 
   addProductToCart = async (productId) => {
     const response = await fetch(
-      `http://localhost:8000/api/orders/addToCart?productId=${productId};userId=${this.context.user.id}`
+      `http://localhost:8000/api/orders/addToCart?productId=${productId}`
     );
+
+    const userId = this.context.user.id;
+    console.log('Productdetails page: ', userId);
 
     if (!response.ok) {
       this.props.history.push("/");

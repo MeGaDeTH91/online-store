@@ -15,11 +15,11 @@ module.exports = {
       }),
   ],
   productValidation: [
-    body("title", "Title should be between 6 and 30 characters long.")
+    body("title", "Title should be between 6 and 35 characters long.")
       .notEmpty()
       .isLength({
         min: 6,
-        max: 30,
+        max: 35,
       }),
     body(
       "description",
@@ -52,11 +52,11 @@ module.exports = {
     ).notEmpty(),
   ],
   categoryValidation: [
-    body("title", "Title should be between 6 and 30 characters long.")
+    body("title", "Title should be between 6 and 35 characters long.")
       .notEmpty()
       .isLength({
         min: 6,
-        max: 30,
+        max: 35,
       }),
   ],
 };

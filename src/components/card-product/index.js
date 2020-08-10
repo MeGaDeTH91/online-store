@@ -28,39 +28,44 @@ const CardProduct = (props) => {
   };
 
   return (
-    <Card >
+    <Card>
       <div className={styles.thumbnail} onClick={onDetails}>
-      <CardImage src={imageURL} alt="Card image cap"></CardImage>
-      <CardBody>
-        <h4>
-          {title.length > 21 ? (
-            title
-          ) : (
-            <div>
-              {" "}
-              {title}
-              <br />
-              <br />
-            </div>
-          )}
-        </h4>
-        <hr />
-        <h3>{price}lv.</h3>
-        <p>{quantity} pieces left.</p>
-      </CardBody>
+        <CardImage src={imageURL} alt="Card image cap"></CardImage>
+        <CardBody>
+          <h4>
+            {title.length > 21 ? (
+              title
+            ) : (
+              <div>
+                {" "}
+                {title}
+                <br />
+                <br />
+              </div>
+            )}
+          </h4>
+          <hr />
+          <h3>{price}lv.</h3>
+          <p>{quantity} pieces left.</p>
+        </CardBody>
       </div>
       <br />
-        <CardParagraph>
-          <TextLink
-            title={`Category: ${category.title}`}
-            href={`/categories/category/${category._id}`}
-          ></TextLink>
-        </CardParagraph>
-        <hr />
-      <CardFooter>
-        {userIsAdministrator ? (<EditButton title="Edit Product" onClick={editProduct}></EditButton>) : null}
-        {userIsAdministrator ? (<DeleteButton  title="Delete Product" onClick={deleteProduct}></DeleteButton>) : null}
-      </CardFooter>
+      <CardParagraph>
+        <TextLink
+          title={`Category: ${category.title}`}
+          href={`/categories/category/${category._id}`}
+        ></TextLink>
+      </CardParagraph>
+      <hr />
+      {userIsAdministrator ? (
+        <CardFooter>
+          <EditButton title="Edit Product" onClick={editProduct}></EditButton>
+          <DeleteButton
+            title="Delete Product"
+            onClick={deleteProduct}
+          ></DeleteButton>
+        </CardFooter>
+      ) : null}
     </Card>
   );
 };
