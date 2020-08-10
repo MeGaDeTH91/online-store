@@ -4,6 +4,7 @@ import UserContext from "../../../UserContext";
 import AddToCartButton from "../../../components/buttons/add-to-cart";
 import EditButton from "../../../components/buttons/edit";
 import DeleteButton from "../../../components/buttons/delete";
+import ListReviews from "../../../components/reviews/list";
 
 class ProductDetailsPage extends Component {
   static contextType = UserContext;
@@ -23,14 +24,14 @@ class ProductDetailsPage extends Component {
     );
 
     if (!response.ok) {
-      this.props.history.push("/error");
+      this.props.history.push("/");
     }
 
     const result = await response.json();
 
     this.setState({
       product: result,
-      reviews: result.reviews,
+      reviews: result.productReviews.sort((a, b) => ('' + b.created_at).localeCompare('' + a.created_at)),
     });
   };
 
@@ -112,6 +113,8 @@ class ProductDetailsPage extends Component {
           <hr />
           <div>
             <h4 className="text-center">Product reviews</h4>
+            
+            {this.state.reviews && this.state.reviews.length ? (<ListReviews reviews={this.state.reviews} />) : <p> There are no reviews for this product yet.</p>}
           </div>
         </div>
       </PageLayout>

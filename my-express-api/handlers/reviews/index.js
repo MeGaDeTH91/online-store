@@ -3,22 +3,6 @@ const Product = require("../products/Product");
 const { validationResult } = require("express-validator");
 
 module.exports = {
-  get: {
-    productReviews(req, res, next) {
-      const playId = req.query.id;
-
-      Product.findById(playId)
-        .populate("productReviews")
-        .lean()
-        .then((product) => {
-          if (product) {
-            return res.send(product.productReviews.sort("-created_at"));
-          }
-          return Promise.reject(new Error("No such product!"));
-        })
-        .catch((err) => res.status(500).send(`"${err.message}"`));
-    },
-  },
   post: {
     createReview(req, res, next) {
       const errors = validationResult(req);

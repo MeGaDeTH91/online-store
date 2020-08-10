@@ -42,11 +42,11 @@ module.exports = {
         .populate("orders")
         .then((user) => {
           if (!user) {
-            Promise.reject(new Error("No such user!"));
+            return Promise.reject(new Error("No such user!"));
           }
 
           if (!user.cart) {
-            Promise.reject(new Error("No products in shopping cart!"));
+            return Promise.reject(new Error("No products in shopping cart!"));
           }
 
           const createdAt = (new Date() + "").slice(0, 24);
@@ -82,7 +82,7 @@ module.exports = {
         .populate("cart")
         .then((user) => {
           if (!user) {
-            Promise.reject(new Error("No such user!"));
+            return Promise.reject(new Error("No such user!"));
           }
 
           Product.findById(productId)

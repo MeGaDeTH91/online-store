@@ -16,7 +16,15 @@ module.exports = {
       Product.findById(req.query.id)
         .populate("usersFavorite")
         .populate("productReviews")
-        .populate('category')
+        .populate("category")
+        .populate({
+          path: "productReviews",
+          sort: "-created_at",
+          populate: {
+            path: "reviewer",
+            model: "User",
+          },
+        })
         .lean()
         .then((product) => {
           if (product) {

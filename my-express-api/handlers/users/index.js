@@ -72,7 +72,7 @@ module.exports = {
             return Promise.reject(new Error("Invalid credentials!"));
           }
 
-          const token = jwt.createToken({ id: user._id});
+          const token = jwt.createToken({ id: user._id });
           return res.header("Authorization", token).send(user);
         })
         .catch((err) => {
@@ -102,7 +102,6 @@ module.exports = {
 
       const { email, fullName, phone, password, rePassword } = req.body;
 
-      
       if (password !== rePassword) {
         return res.status(401).send(`"Passwords do not match!"`);
       }
@@ -116,7 +115,7 @@ module.exports = {
           return User.create({ email, fullName, phone, password });
         })
         .then((createdUser) => {
-          const token = jwt.createToken({ id: createdUser._id});
+          const token = jwt.createToken({ id: createdUser._id });
           return res.header("Authorization", token).send(createdUser);
         })
         .catch((err) => {
@@ -138,20 +137,43 @@ module.exports = {
     changeRole(req, res, next) {
       const userId = req.query.id;
 
-      User.findById(userId).then((user) => {
-        if (!user) {
-          Promise.reject(new Error("No such user!"));
-        }
+      User.findById(userId)
+        .then((user) => {
+          if (!user) {
+            return Promise.reject(new Error("No such user!"));
+          }
 
-        User.updateOne(
-          { _id: userId },
-          { isAdministrator: !user.isAdministrator }
-        )
-          .then((updatedUser) => res.send(updatedUser))
-          .catch((err) => {
-            return res.status(500).send(`"${err.message}"`);
-          });
-      });
+          User.updateOne(
+            { _id: userId },
+            { isAdministrator: !user.isAdministrator }
+          )
+            .then((updatedUser) => res.send(updatedUser))
+            .catch((err) => {
+              return res.status(401).send(`"${err.message}"`);
+            });
+        })
+        .catch((err) => {
+          return res.status(401).send(`"${err.message}"`);
+        });
+    },
+    changeStatus(req, res, next) {
+      const userId = req.query.id;
+
+      User.findById(userId)
+        .then((user) => {
+          if (!user) {
+            return Promise.reject(new Error("No such user!"));
+          }
+
+          User.updateOne({ _id: userId }, { isActive: !user.isActive })
+            .then((updatedUser) => res.send(updatedUser))
+            .catch((err) => {
+              return res.status(500).send(`"${err.message}"`);
+            });
+        })
+        .catch((err) => {
+          return res.status(401).send(`"${err.message}"`);
+        });
     },
   },
   delete: {

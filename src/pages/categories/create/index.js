@@ -52,7 +52,6 @@ const CreateCategoryPage = () => {
         title,
         imageURL,
       },(product) => {
-
         notifications.showMessage("Product created successfully!", 'success');
         history.push("/");
       },

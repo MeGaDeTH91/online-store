@@ -3,7 +3,7 @@ import PageLayout from "../../components/page-layout";
 import Title from "../../components/title";
 import CardDeckComponent from "../../components/card-deck";
 import CardProduct from "../../components/card-product";
-import formatPrice from '../../utils/priceFormatter';
+import formatPrice from "../../utils/priceFormatter";
 
 class HomePage extends Component {
   constructor(props) {
@@ -34,21 +34,25 @@ class HomePage extends Component {
         <div>
           <Title title="Products"></Title>
           <hr />
-          <CardDeckComponent>
-            {this.state.products.map((x) => {
-              return (
-                <CardProduct
-                  key={x._id}
-                  productId={x._id}
-                  imageURL={x.imageURL}
-                  title={x.title}
-                  price={formatPrice(x.price)}
-                  quantity={x.quantity}
-                  category={x.category}
-                ></CardProduct>
-              );
-            })}
-          </CardDeckComponent>
+          {this.state.products && this.state.products.length ? (
+            <CardDeckComponent>
+              {this.state.products.map((x) => {
+                return (
+                  <CardProduct
+                    key={x._id}
+                    productId={x._id}
+                    imageURL={x.imageURL}
+                    title={x.title}
+                    price={formatPrice(x.price)}
+                    quantity={x.quantity}
+                    category={x.category}
+                  ></CardProduct>
+                );
+              })}
+            </CardDeckComponent>
+          ) : (
+            <p>No products or database is down.</p>
+          )}
         </div>
       </PageLayout>
     );
