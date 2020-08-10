@@ -15,7 +15,6 @@ module.exports = {
     product(req, res, next) {
       Product.findById(req.query.id)
         .populate("usersFavorite")
-        .populate("productReviews")
         .populate("category")
         .populate({
           path: "productReviews",
@@ -121,9 +120,31 @@ module.exports = {
   delete: {
     product(req, res, next) {
       const id = req.query.id;
+      let categoryId = '';
 
-      Product.deleteOne({ _id: id })
-        .then((removedProduct) => res.send(removedProduct))
+      Product.findById(id)
+        .lean()
+        .then((currentProduct) => {
+          if (!currentProduct) {
+            return Promise.reject(new Error("No such product!"));
+          }
+
+          categoryId = currentProduct.category;
+
+          return Promise.all([
+            Product.deleteOne({ _id: id }),
+            Category.updateOne({ _id: categoryId }, { $pull: { products: id } }),
+          ]);
+        })
+        .then(([deletedProduct, removedElement]) => {
+          if (!deletedProduct || !removedElement) {
+            return Promise.reject(
+              new Error("Product was not removed successfully!")
+            );
+          }
+
+          return res.status(200).send(deletedProduct);
+        })
         .catch((err) => {
           return res.status(401).send(`"${err.message}"`);
         });

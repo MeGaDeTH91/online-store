@@ -15,6 +15,8 @@ import EditProductPage from "./pages/products/edit";
 import DeleteProductPage from "./pages/products/delete";
 import EditCategoryPage from "./pages/categories/edit";
 import UsersPage from "./pages/users";
+import CategoryProductsPage from "./pages/categories/products-list";
+import HomeFilteredPage from "./pages/home-filtered";
 
 const StoreNavigation = () => {
   const context = useContext(UserContext);
@@ -29,9 +31,10 @@ const StoreNavigation = () => {
     <BrowserRouter>
       <Switch>
         <Route exact path="/" component={HomePage} />
+        <Route exact path="/search/:search" component={HomeFilteredPage} />
         <Route exact path="/products/product-details/:id" component={ProductDetailsPage} />
         <Route exact path="/categories/all" component={CategoriesPage} />
-        <Route exact path="/categories/category/:id" component={CategoriesPage} />
+        <Route exact path="/categories/category/:id" component={CategoryProductsPage} />
 
         <Route exact path="/products/create">
           {authorizationSwitch(admin, <CreateProductPage />, "/")}

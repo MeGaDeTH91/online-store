@@ -1,15 +1,28 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Navbar, Nav, Form, FormControl, Button } from "react-bootstrap";
 import getNavigationRoutes from "../../utils/routes";
 import UserContext from "../../UserContext";
 import styled from "styled-components";
+import { useHistory } from "react-router-dom";
 
 const Header = () => {
   const context = useContext(UserContext);
+  const history = useHistory();
+
+  const[search, setSearch] = useState('');
 
   const { user } = context;
 
   const links = getNavigationRoutes(user);
+
+  const searchProducts = (e) => {
+    if (search) {
+      history.push(`/search/${search}`)
+    } else {
+      e.preventDefault();
+      history.push('/');
+    }
+  }
 
   return (
     <>
@@ -22,8 +35,9 @@ const Header = () => {
             type="text"
             placeholder="Search Product..."
             className="mr-sm-2"
+            onChange={(e) => setSearch(e.target.value)}
           />
-          <Button variant="outline-info">Search</Button>
+          <Button type='submit' onClick={searchProducts} variant="outline-info">Search</Button>
         </Form>
 
         <Nav className="ml-auto">
