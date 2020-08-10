@@ -9,14 +9,11 @@ const AdminButtonGroup = ({ title,  editFunc, deleteFunc }) => {
   const { user } = context;
     const userIsAdministrator = user && user.isAdministrator;
 
-
   return (
     <span>
       {userIsAdministrator ? <EditButton title={`Edit ${title}`} onClick={editFunc}></EditButton> : null}
       {userIsAdministrator ? <DeleteButton title={`Delete ${title}`} onClick={deleteFunc}></DeleteButton> : null}
     </span>
-    
-              
   );
 };
 

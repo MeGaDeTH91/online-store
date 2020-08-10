@@ -7,7 +7,7 @@ module.exports = {
       Category.find()
         .lean()
         .then((categories) => res.send(categories))
-        .catch((err) => res.status(500).send(err.message));
+        .catch((err) => res.status(500).send(`"${err.message}"`));
     },
     category(req, res, next) {
       Category.findById(req.query.id)
@@ -19,7 +19,7 @@ module.exports = {
           }
           return Promise.reject(new Error("No such category!"));
         })
-        .catch((err) => res.status(500).send(err.message));
+        .catch((err) => res.status(500).send(`"${err.message}"`));
     },
   },
   post: {
@@ -27,7 +27,7 @@ module.exports = {
       const errors = validationResult(req);
 
       if (!errors.isEmpty()) {
-        return res.status(401).send(errors.array()[0].msg);
+        return res.status(401).send(`"${errors.array()[0].msg}"`);
       }
 
       const { title, imageURL } = req.body;
@@ -42,7 +42,7 @@ module.exports = {
           Category.create({ title, imageURL })
           .then(category => res.status(200).send(category));
         })
-        .catch((err) => res.status(408).send(err.message));
+        .catch((err) => res.status(408).send(`"${err.message}"`));
     },
   },
 };

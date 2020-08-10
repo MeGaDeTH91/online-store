@@ -10,12 +10,13 @@ module.exports = {
         .populate("category")
         .lean()
         .then((products) => res.send(products))
-        .catch((err) => res.status(500).send("Error"));
+        .catch((err) => res.status(500).send(`"Error"`));
     },
     product(req, res, next) {
       Product.findById(req.query.id)
         .populate("usersFavorite")
         .populate("productReviews")
+        .populate('category')
         .lean()
         .then((product) => {
           if (product) {
@@ -23,7 +24,7 @@ module.exports = {
           }
           return Promise.reject(new Error("Product not found!"));
         })
-        .catch((err) => res.status(404).send("Product not found!"));
+        .catch((err) => res.status(404).send(`"${err.message}"`));
     },
   },
   post: {
@@ -31,7 +32,7 @@ module.exports = {
       const errors = validationResult(req);
 
       if (!errors.isEmpty()) {
-        return res.status(401).send(errors.array()[0].msg);
+        return res.status(401).send(`"${errors.array()[0].msg}"`);
       }
 
       const {
@@ -75,7 +76,7 @@ module.exports = {
           });
         })
         .catch((err) => {
-          return res.status(401).send(err.message);
+          return res.status(401).send(`"${err.message}"`);
         });
     },
   },
@@ -95,7 +96,8 @@ module.exports = {
       } = req.body;
 
       if (!errors.isEmpty()) {
-        return res.status(401).send(errors.array()[0].msg);
+        console.log('HERE: ', errors.array()[0].msg)
+        return res.status(401).send(`"${errors.array()[0].msg}"`);
       }
 
       Product.updateOne(
@@ -104,7 +106,7 @@ module.exports = {
       )
         .then((updatedProduct) => res.send(updatedProduct))
         .catch((err) => {
-          return res.status(401).send(err.message);
+          return res.status(401).send(`"${err.message}"`);
         });
     },
   },
@@ -116,7 +118,7 @@ module.exports = {
       Product.deleteOne({ _id: id })
         .then((removedProduct) => res.send(removedProduct))
         .catch((err) => {
-          return res.status(401).send(err.message);
+          return res.status(401).send(`"${err.message}"`);
         });
     },
   },

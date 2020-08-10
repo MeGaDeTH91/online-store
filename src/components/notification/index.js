@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Alert } from "react-bootstrap";
 import NotificationContext from "../../NotificationContext";
+import styles from './index.module.css'
 
 const Notification = () => {
   const notificationContext = useContext(NotificationContext);
@@ -11,7 +12,7 @@ const Notification = () => {
 
   const popUpNotification = () => {
     return (
-      <Alert variant={notificationContext.messageType} onClose={closeNotification} dismissible>
+      <Alert variant={notificationContext.messageType} className={styles.pop} onClose={closeNotification} dismissible>
         <Alert.Heading>{notificationContext.message}</Alert.Heading>
       </Alert>
     );

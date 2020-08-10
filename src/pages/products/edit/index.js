@@ -1,27 +1,32 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
-import { useHistory } from "react-router-dom";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useContext,
+} from "react";
+import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import PageLayout from "../../../components/page-layout";
 import Title from "../../../components/title";
 import Input from "../../../components/input/active";
+import DisabledInput from "../../../components/input/disabled";
 import TextArea from "../../../components/textarea";
 import UploadButton from "../../../components/upload-button";
-import CategoryDropdown from "../../../components/category-dropdown";
 import NotificationContext from "../../../NotificationContext";
 import executeAuthRequest from "../../../utils/executeAuthRequest";
 
-const CreateProductPage = () => {
+const EditProductPage = () => {
   const history = useHistory();
+  const params = useParams();
   const notifications = useContext(NotificationContext);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [imageURL, setImageURL] = useState(null);
+  const [imageURL, setImageURL] = useState("");
   const [price, setPrice] = useState(0.0);
   const [quantity, setQuantity] = useState(0);
-  const [categoryTitle, setCategoryTitle] = useState("Choose category");
   const [category, setCategory] = useState("");
-  const [categories, setCategories] = useState([]);
+  const [categoryTitle, setCategoryTitle] = useState("");
 
   const openWidget = () => {
     const widget = window.cloudinary.createUploadWidget(
@@ -39,43 +44,52 @@ const CreateProductPage = () => {
     widget.open();
   };
 
-  const getCategories = useCallback(async () => {
-    const response = await fetch(`http://localhost:8000/api/categories/all`);
+  const getProduct = useCallback(async () => {
+    const response = await fetch(
+      `http://localhost:8000/api/products/product?id=${params.id}`
+    );
 
     if (!response.ok) {
-      notifications.showMessage('Error occured.', 'danger');
-      history.push("/error");
+      notifications.showMessage("Invalid productId.", "danger");
+      history.push("/");
     } else {
-      const categories = await response.json();
+      const product = await response.json();
 
-      if (!categories) {
-        notifications.showMessage('Error occured.', 'danger');
-        history.push("/error");
+      if (!product) {
+        notifications.showMessage("No such product.", "danger");
+        history.push("/");
       }
 
-      setCategories(categories);
+      setTitle(product.title);
+      setDescription(product.description);
+      setImageURL(product.imageURL);
+      setPrice(product.price);
+      setQuantity(product.quantity);
+      setTitle(product.title);
+      setCategory(product.category._id);
+      setCategoryTitle(product.category.title);
     }
-  }, [history, notifications]);
+  }, [history, notifications, params]);
 
   useEffect(() => {
-    getCategories();
-  }, [getCategories]);
-
-  const handleDropdownSelect = (categoryId, e) => {
-    setCategory(categoryId);
-    setCategoryTitle(e.target.textContent);
-  };
+    getProduct();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!title || !description || !imageURL) {
-      notifications.showMessage('Please provide product title, description and upload Image.', 'danger');
+      notifications.showMessage(
+        "Please provide product title, description and upload Image.",
+        "danger"
+      );
       return;
     }
 
-    await executeAuthRequest("http://localhost:8000/api/products/create", 
-      "POST",
+    await executeAuthRequest(
+      `http://localhost:8000/api/products/product?id=${params.id}`,
+      "PUT",
       {
         title,
         description,
@@ -83,24 +97,25 @@ const CreateProductPage = () => {
         price,
         quantity,
         category,
-      },(product) => {
-
-        notifications.showMessage("Product created successfully!", 'success');
+      },
+      (product) => {
+        notifications.showMessage("Product changed successfully!", "success");
         history.push("/");
       },
       (error) => {
-        notifications.showMessage("Please provide different product title.", 'danger');
-        history.push("/products/create");
+        notifications.showMessage(
+          error,
+          "danger"
+        );
+        history.push(`/products/product-edit/${params.id}`);
       }
     );
-
-    history.push("/");
   };
 
   return (
     <PageLayout>
       <CreateProductForm onSubmit={handleSubmit}>
-        <Title title="Add product" />
+        <Title title="Edit product" />
         <hr />
         {imageURL ? (
           <img
@@ -142,13 +157,13 @@ const CreateProductPage = () => {
           label="Quantity"
           onChange={(e) => setQuantity(e.target.value)}
         ></Input>
-        <CategoryDropdown
-          title={categoryTitle}
-          categoriesList={categories}
-          handleSelect={handleDropdownSelect}
-        />
+        <DisabledInput
+          id="category"
+          value={categoryTitle}
+          label="Category"
+        ></DisabledInput>
         <FormControlDiv>
-          <FormButton type="submit">{"Add product"}</FormButton>
+          <FormButton type="submit">{"Change product"}</FormButton>
         </FormControlDiv>
       </CreateProductForm>
     </PageLayout>
@@ -189,4 +204,4 @@ const FormControlDiv = styled.div`
   text-align: center;
 `;
 
-export default CreateProductPage;
+export default EditProductPage;

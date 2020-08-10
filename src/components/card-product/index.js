@@ -1,21 +1,47 @@
-import React from "react";
+import React, { useContext } from "react";
 import TextLink from "../text-link";
 import SubmitButton from "../buttons/submit";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
+import UserContext from "../../UserContext";
+import AdminButtonGroup from "../buttons/button-group";
 
-const CardProduct = ({ productId, imageURL, title, price, category }) => {
+const CardProduct = (props) => {
+  const { productId, imageURL, title, price, category, quantity } = props;
   const history = useHistory();
+  const context = useContext(UserContext);
 
   const onDetails = () => {
-    history.push(`/products/product/${productId}`);
+    history.push(`/products/product-details/${productId}`);
+  };
+
+  const { user } = context;
+  const userIsAdministrator = user && user.isAdministrator;
+
+  const editProduct = () => {
+    history.push(`/products/product-edit/${productId}`);
+  };
+
+  const deleteProduct = () => {
+    history.push(`/products/product-delete/${productId}`);
   };
 
   return (
     <Card>
       <CardImage src={imageURL} alt="Card image cap"></CardImage>
       <CardBody>
-        <h4>{ title.length > 21 ? (title) : (<div> {title}<br /><br /></div>)}</h4>
+        <h4>
+          {title.length > 21 ? (
+            title
+          ) : (
+            <div>
+              {" "}
+              {title}
+              <br />
+              <br />
+            </div>
+          )}
+        </h4>
         <hr />
         <CardParagraph>
           <TextLink
@@ -23,10 +49,19 @@ const CardProduct = ({ productId, imageURL, title, price, category }) => {
             href={`/categories/category/${category._id}`}
           ></TextLink>
         </CardParagraph>
+        <hr />
         <h3>{price}lv.</h3>
+        <p>{quantity} pieces left.</p>
       </CardBody>
       <CardFooter>
         <SubmitButton title="Details" onClick={onDetails}></SubmitButton>
+        {userIsAdministrator ? (
+          <AdminButtonGroup
+            title="Product"
+            editFunc={editProduct}
+            deleteFunc={deleteProduct}
+          ></AdminButtonGroup>
+        ) : null}
       </CardFooter>
     </Card>
   );

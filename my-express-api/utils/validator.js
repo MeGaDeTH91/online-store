@@ -23,12 +23,12 @@ module.exports = {
       }),
     body(
       "description",
-      "Description should be between 10 and 200 characters long."
+      "Description should be between 10 and 250 characters long."
     )
       .notEmpty()
       .isLength({
         min: 10,
-        max: 200,
+        max: 250,
       }),
     body("imageURL", "Invalid image URL.").notEmpty().isURL(),
     body("price", "Invalid price.")

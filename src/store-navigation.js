@@ -11,6 +11,7 @@ import UserContext from "./UserContext";
 import LogoutPage from "./pages/logout";
 import CategoriesPage from "./pages/categories/all";
 import ProductDetailsPage from "./pages/products/details";
+import EditProductPage from "./pages/products/edit";
 
 const StoreNavigation = () => {
   const context = useContext(UserContext);
@@ -25,12 +26,15 @@ const StoreNavigation = () => {
     <BrowserRouter>
       <Switch>
         <Route exact path="/" component={HomePage} />
-        <Route exact path="/products/product/:id" component={ProductDetailsPage} />
+        <Route exact path="/products/product-details/:id" component={ProductDetailsPage} />
         <Route exact path="/categories/all" component={CategoriesPage} />
         <Route exact path="/categories/category/:id" component={CategoriesPage} />
 
         <Route exact path="/products/create">
           {authorizationSwitch(admin, <CreateProductPage />, "/")}
+        </Route>
+        <Route exact path="/products/product-edit/:id">
+          {authorizationSwitch(admin, <EditProductPage />, "/")}
         </Route>
         <Route exact path="/categories/create">
           {authorizationSwitch(admin, <CreateCategoryPage />, "/")}

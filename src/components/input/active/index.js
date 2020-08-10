@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const Input = ({ id, label, type, value, onChange }) => {
+const Input = ({ id, label, type, value, onChange, disabled }) => {
   
   return (
     <FormControlDiv>

@@ -16,7 +16,7 @@ module.exports = {
           }
           return Promise.reject(new Error("No such product!"));
         })
-        .catch((err) => res.status(500).send(err.message));
+        .catch((err) => res.status(500).send(`"${err.message}"`));
     },
   },
   post: {
@@ -24,7 +24,7 @@ module.exports = {
       const errors = validationResult(req);
 
       if (!errors.isEmpty()) {
-        return res.status(401).send(errors.array()[0].msg);
+        return res.status(401).send(`"${errors.array()[0].msg}"`);
       }
 
       const productId = req.query.id;
@@ -54,11 +54,11 @@ module.exports = {
               });
             })
             .catch((err) => {
-              return res.status(401).send(err.message);
+              return res.status(401).send(`"${err.message}"`);
             });
         })
         .catch((err) => {
-          return res.status(409).send(err.message);
+          return res.status(409).send(`"${err.message}"`);
         });
     },
   },

@@ -12,7 +12,9 @@ const authenticate = async (url, body, onSuccess, onFailure) => {
 
     const response = await promise.json();
 
-    if (response.email && response.isActive && authToken) {
+    if (!promise.ok) {
+      onFailure(`Error occured: ${response}`);
+    } else if (response.email && response.isActive && authToken) {
       document.cookie = `x-auth-token=${authToken}; Secure`;
       onSuccess({
         email: response.email,
@@ -23,6 +25,8 @@ const authenticate = async (url, body, onSuccess, onFailure) => {
     } else {
       onFailure("Account is suspended!");
     }
+
+    
   } catch (error) {
     onFailure(error);
   }

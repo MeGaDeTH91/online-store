@@ -14,9 +14,9 @@ module.exports = {
           if (user) {
             return res.send(user.cart);
           }
-          return res.status(404).send("No such user!");
+          return res.status(404).send(`"No such user!"`);
         })
-        .catch((err) => res.status(500).send(err.message));
+        .catch((err) => res.status(500).send(`"${err.message}"`));
     },
     userOrders(req, res, next) {
       const userId = req.query.id;
@@ -28,9 +28,9 @@ module.exports = {
           if (user) {
             return res.send(user.orders);
           }
-          return res.status(404).send("No such user!");
+          return res.status(404).send(`"No such user!"`);
         })
-        .catch((err) => res.status(500).send(err.message));
+        .catch((err) => res.status(500).send(`"${err.message}"`));
     },
   },
   post: {
@@ -64,7 +64,7 @@ module.exports = {
             return res.status(200).send(order);
           });
         })
-        .catch((err) => res.status(500).send(err.message));
+        .catch((err) => res.status(500).send(`"${err.message}"`));
     },
     addToCart(req, res, next) {
       const productId = req.query.productId;
@@ -89,9 +89,9 @@ module.exports = {
             .then((product) => {
               
             })
-            .catch((err) => res.status(500).send(err.message));
+            .catch((err) => res.status(500).send(`"${err.message}"`));
         })
-        .catch((err) => res.status(500).send(err.message));
+        .catch((err) => res.status(500).send(`"${err.message}"`));
     },
   },
 };

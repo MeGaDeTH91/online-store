@@ -10,7 +10,7 @@ module.exports = {
       User.find()
         .lean()
         .then((users) => res.send(users))
-        .catch((err) => res.status(500).send(err.message));
+        .catch((err) => res.status(500).send(`"${err.message}"`));
     },
     user(req, res, next) {
       User.findById(req.query.id)
@@ -19,7 +19,7 @@ module.exports = {
         .populate("reviews")
         .lean()
         .then((user) => res.send(user))
-        .catch((err) => res.status(500).send(err.message));
+        .catch((err) => res.status(500).send(`"${err.message}"`));
     },
     verifyLogin(req, res, next) {
       const token = req.headers.authorization || "";
@@ -45,7 +45,7 @@ module.exports = {
               "jwt must be provided",
             ].includes(err.message)
           ) {
-            return res.status(401).send("UNAUTHORIZED!");
+            return res.status(401).send(`"UNAUTHORIZED!"`);
           }
 
           return res.send({
@@ -76,7 +76,7 @@ module.exports = {
           return res.header("Authorization", token).send(user);
         })
         .catch((err) => {
-          return res.status(401).send(err.message);
+          return res.status(401).send(`"${err.message}"`);
         });
     },
     logout(req, res, next) {
@@ -87,24 +87,24 @@ module.exports = {
       TokenBlacklist.create({ token })
         .then(() => {
           req.user = null;
-          return res.clearCookie(cookie).send("Logged out successfully!");
+          return res.clearCookie(cookie).send(`"Logged out successfully!"`);
         })
         .catch((err) => {
-          return res.status(500).send(err.message);
+          return res.status(500).send(`"${err.message}"`);
         });
     },
     register(req, res, next) {
       const errors = validationResult(req);
 
       if (!errors.isEmpty()) {
-        return res.status(401).send(errors.array()[0].msg);
+        return res.status(401).send(`"${errors.array()[0].msg}"`);
       }
 
       const { email, fullName, phone, password, rePassword } = req.body;
 
       
       if (password !== rePassword) {
-        return res.status(401).send("Passwords do not match!");
+        return res.status(401).send(`"Passwords do not match!"`);
       }
 
       User.findOne({ email })
@@ -120,7 +120,7 @@ module.exports = {
           return res.header("Authorization", token).send(createdUser);
         })
         .catch((err) => {
-          return res.status(409).send(err.message);
+          return res.status(409).send(`"${err.message}"`);
         });
     },
   },
@@ -149,7 +149,7 @@ module.exports = {
         )
           .then((updatedUser) => res.send(updatedUser))
           .catch((err) => {
-            return res.status(500).send(err.message);
+            return res.status(500).send(`"${err.message}"`);
           });
       });
     },
@@ -160,7 +160,7 @@ module.exports = {
       User.deleteOne({ _id: id })
         .then((removedUser) => res.send(removedUser))
         .catch((err) => {
-          return res.status(500).send(err.message);
+          return res.status(500).send(`"${err.message}"`);
         });
     },
   },

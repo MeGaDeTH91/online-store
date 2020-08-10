@@ -43,6 +43,7 @@ class HomePage extends Component {
                   imageURL={x.imageURL}
                   title={x.title}
                   price={formatPrice(x.price)}
+                  quantity={x.quantity}
                   category={x.category}
                 ></CardProduct>
               );

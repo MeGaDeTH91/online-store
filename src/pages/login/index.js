@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import PageLayout from "../../components/page-layout";
 import Title from "../../components/title";
-import Input from "../../components/input";
+import Input from "../../components/input/active";
 import authenticate from "../../utils/authenticate";
 import UserContext from "../../UserContext";
 import { useHistory } from "react-router-dom";

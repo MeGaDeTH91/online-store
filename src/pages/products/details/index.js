@@ -31,12 +31,19 @@ class ProductDetailsPage extends Component {
     });
   };
 
+  editProduct = () => {
+    this.props.history.push(`/products/product-edit/${this.state.product._id}`)
+  }
+
+  deleteProduct = () => {
+    this.props.history.push(`/products/product-delete/${this.state.product._id}`)
+  }
+
   addProductToCart = async (productId) => {
       const response = await fetch(`http://localhost:8000/api/orders/addToCart?productId=${productId};userId=${this.context.user.id}`);
       
-      console.log(response);
       if (!response.ok) {
-        this.props.history.push("/error");
+        this.props.history.push("/");
       }
   
       const result = await response.json();
@@ -75,7 +82,7 @@ class ProductDetailsPage extends Component {
               <p>{product.description}</p>
 
               {userIsLogged ? <AddToCartButton onClick={e => this.addProductToCart(product._id)} /> : null}
-              {userIsAdministrator ? <AdminButtonGroup title="Product"></AdminButtonGroup> : null}
+              {userIsAdministrator ? <AdminButtonGroup title="Product" editFunc={this.editProduct} deleteFunc={this.deleteProduct}></AdminButtonGroup> : null}
             </div>
           </div>
           <hr />

@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import PageLayout from "../../../components/page-layout";
 import Title from "../../../components/title";
-import Input from "../../../components/input";
+import Input from "../../../components/input/active";
 import UploadButton from "../../../components/upload-button";
 import NotificationContext from "../../../NotificationContext";
 import executeAuthRequest from "../../../utils/executeAuthRequest";
