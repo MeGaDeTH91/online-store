@@ -28,7 +28,7 @@ module.exports = {
       }
 
       const productId = req.query.id;
-      const { content } = req.body;
+      const { content, reviewer } = req.body;
 
       Product.findById(productId)
         .lean()
@@ -38,7 +38,6 @@ module.exports = {
           }
 
           const product = productId;
-          const reviewer = req.user._id;
 
           Review.create({
             content,

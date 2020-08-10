@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
-import TextLink from "../text-link";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import styles from "./index.module.css";
 import UserContext from "../../UserContext";
-import EditButton from "../buttons/edit";
-import DeleteButton from "../buttons/delete";
+import CardBody from "../card-basics/body";
+import CardFooter from "../card-basics/footer";
+import CardParagraph from "../card-basics/paragraph";
 
 const CardProduct = (props) => {
   const { productId, imageURL, title, price, category, quantity } = props;
@@ -31,40 +31,17 @@ const CardProduct = (props) => {
     <Card>
       <div className={styles.thumbnail} onClick={onDetails}>
         <CardImage src={imageURL} alt="Card image cap"></CardImage>
-        <CardBody>
-          <h4>
-            {title.length > 21 ? (
-              title
-            ) : (
-              <div>
-                {" "}
-                {title}
-                <br />
-                <br />
-              </div>
-            )}
-          </h4>
-          <hr />
-          <h3>{price}lv.</h3>
-          <p>{quantity} pieces left.</p>
-        </CardBody>
+        <CardBody title={title} price={price} quantity={quantity} />
       </div>
       <br />
-      <CardParagraph>
-        <TextLink
-          title={`Category: ${category.title}`}
-          href={`/categories/category/${category._id}`}
-        ></TextLink>
-      </CardParagraph>
+      <CardParagraph title={category.title} id={category._id} />
       <hr />
       {userIsAdministrator ? (
-        <CardFooter>
-          <EditButton title="Edit Product" onClick={editProduct}></EditButton>
-          <DeleteButton
-            title="Delete Product"
-            onClick={deleteProduct}
-          ></DeleteButton>
-        </CardFooter>
+        <CardFooter
+          title="Product"
+          editProduct={editProduct}
+          deleteProduct={deleteProduct}
+        />
       ) : null}
     </Card>
   );
@@ -97,34 +74,6 @@ const CardImage = styled.img`
   border-top-right-radius: calc(0.25rem - 1px);
   border-style: none;
   box-sizing: border-box;
-`;
-
-const CardBody = styled.div`
-  webkit-box-flex: 1;
-  ms-flex: 1 1 auto;
-  flex: 1 1 auto;
-  padding: 1.25rem;
-  word-wrap: break-word;
-  box-sizing: border-box;
-`;
-
-const CardParagraph = styled.p`
-  text-align: center;
-  color: black;
-  margin-bottom: 0;
-  margin-top: 0;
-  box-sizing: border-box;
-`;
-
-const CardFooter = styled.div`
-  border-radius: 0 0 calc(0.25rem - 1px) calc(0.25rem - 1px);
-  background-color: #dddddd;
-  color: white;
-  border-top: 1px solid #dddddd;
-  margin: 0;
-  padding: 0;
-  font-size: medium;
-  font-family: "Miltonian Tattoo", cursive;
 `;
 
 export default CardProduct;

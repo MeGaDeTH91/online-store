@@ -13,7 +13,7 @@ class ProductDetailsPage extends Component {
 
     this.state = {
       product: null,
-      reviews: []
+      reviews: [],
     };
   }
 
@@ -30,7 +30,7 @@ class ProductDetailsPage extends Component {
 
     this.setState({
       product: result,
-      reviews: result.reviews
+      reviews: result.reviews,
     });
   };
 
@@ -50,7 +50,7 @@ class ProductDetailsPage extends Component {
     );
 
     const userId = this.context.user.id;
-    console.log('Productdetails page: ', userId);
+    console.log("Productdetails page: ", userId);
 
     if (!response.ok) {
       this.props.history.push("/");
@@ -95,12 +95,24 @@ class ProductDetailsPage extends Component {
                   onClick={(e) => this.addProductToCart(product._id)}
                 />
               ) : null}
-              {userIsAdministrator ? (<EditButton title="Edit Product" onClick={this.editProduct}></EditButton>) : null}
-              {userIsAdministrator ? (<DeleteButton title="Delete Product" onClick={this.deleteProduct}></DeleteButton>) : null}
+              {userIsAdministrator ? (
+                <EditButton
+                  title="Edit Product"
+                  onClick={this.editProduct}
+                ></EditButton>
+              ) : null}
+              {userIsAdministrator ? (
+                <DeleteButton
+                  title="Delete Product"
+                  onClick={this.deleteProduct}
+                ></DeleteButton>
+              ) : null}
             </div>
           </div>
           <hr />
-          <h4 className="text-center">Product reviews</h4>
+          <div>
+            <h4 className="text-center">Product reviews</h4>
+          </div>
         </div>
       </PageLayout>
     );
