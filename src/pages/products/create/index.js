@@ -4,11 +4,12 @@ import styled from "styled-components";
 import PageLayout from "../../../components/page-layout";
 import Title from "../../../components/title";
 import Input from "../../../components/input/active";
-import TextArea from "../../../components/textarea";
+import TextAreaActive from "../../../components/textarea/active";
 import UploadButton from "../../../components/upload-button";
 import CategoryDropdown from "../../../components/category-dropdown";
 import NotificationContext from "../../../NotificationContext";
 import executeAuthRequest from "../../../utils/executeAuthRequest";
+import SubmitButton from "../../../components/buttons/submit";
 
 const CreateProductPage = () => {
   const history = useHistory();
@@ -43,13 +44,13 @@ const CreateProductPage = () => {
     const response = await fetch(`http://localhost:8000/api/categories/all`);
 
     if (!response.ok) {
-      notifications.showMessage('Error occured.', 'danger');
+      notifications.showMessage("Error occured.", "danger");
       history.push("/error");
     } else {
       const categories = await response.json();
 
       if (!categories) {
-        notifications.showMessage('Error occured.', 'danger');
+        notifications.showMessage("Error occured.", "danger");
         history.push("/error");
       }
 
@@ -66,15 +67,25 @@ const CreateProductPage = () => {
     setCategoryTitle(e.target.textContent);
   };
 
+  const goBack = (e) => {
+    e.preventDefault();
+
+    history.goBack();
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!title || !description || !imageURL) {
-      notifications.showMessage('Please provide product title, description and upload Image.', 'danger');
+      notifications.showMessage(
+        "Please provide product title, description and upload Image.",
+        "danger"
+      );
       return;
     }
 
-    await executeAuthRequest("http://localhost:8000/api/products/create", 
+    await executeAuthRequest(
+      "http://localhost:8000/api/products/create",
       "POST",
       {
         title,
@@ -83,13 +94,16 @@ const CreateProductPage = () => {
         price,
         quantity,
         category,
-      },(product) => {
-
-        notifications.showMessage("Product created successfully!", 'success');
+      },
+      (product) => {
+        notifications.showMessage("Product created successfully!", "success");
         history.push("/");
       },
       (error) => {
-        notifications.showMessage("Please provide different product title.", 'danger');
+        notifications.showMessage(
+          "Please provide different product title.",
+          "danger"
+        );
         history.push("/products/create");
       }
     );
@@ -116,12 +130,12 @@ const CreateProductPage = () => {
           label="Title"
           onChange={(e) => setTitle(e.target.value)}
         ></Input>
-        <TextArea
+        <TextAreaActive
           id="description"
           value={description}
           label="Description"
           onChange={(e) => setDescription(e.target.value)}
-        ></TextArea>
+        ></TextAreaActive>
         <UploadButton
           title="Upload Image"
           id="imageURL"
@@ -147,9 +161,7 @@ const CreateProductPage = () => {
           categoriesList={categories}
           handleSelect={handleDropdownSelect}
         />
-        <FormControlDiv>
-          <FormButton type="submit">{"Add product"}</FormButton>
-        </FormControlDiv>
+        <SubmitButton title="Add product" goBack={goBack} />
       </CreateProductForm>
     </PageLayout>
   );
@@ -159,34 +171,6 @@ const CreateProductForm = styled.form`
   width: 83%;
   display: inline-block;
   vertical-align: top;
-`;
-
-const FormButton = styled.button`
-  background-color: #343a40;
-  color: #b817a1;
-  padding: 2%;
-  width: auto;
-  border-radius: 6px;
-  display: block;
-  margin: 0 auto;
-  border: none;
-  margin-top: 0.5%;
-  border: 2px solid white;
-  margin-bottom: 2%;
-
-  &:hover {
-    background-color: #17a2b8;
-    border: 2px solid #234465;
-    color: #b82c17;
-    font-style: italic;
-  }
-`;
-
-const FormControlDiv = styled.div`
-  width: 30%;
-  margin: 0 auto;
-  padding: 1%;
-  text-align: center;
 `;
 
 export default CreateProductPage;

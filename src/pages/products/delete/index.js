@@ -1,22 +1,15 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useContext,
-} from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import PageLayout from "../../../components/page-layout";
 import Title from "../../../components/title";
-import Input from "../../../components/input/active";
 import DisabledInput from "../../../components/input/disabled";
-import TextAreaActive from "../../../components/textarea/active";
-import UploadButton from "../../../components/upload-button";
 import NotificationContext from "../../../NotificationContext";
 import executeAuthRequest from "../../../utils/executeAuthRequest";
+import TextAreaDisabled from "../../../components/textarea/disabled";
 import SubmitButton from "../../../components/buttons/submit";
 
-const EditProductPage = () => {
+const DeleteProductPage = () => {
   const history = useHistory();
   const params = useParams();
   const notifications = useContext(NotificationContext);
@@ -26,24 +19,7 @@ const EditProductPage = () => {
   const [imageURL, setImageURL] = useState("");
   const [price, setPrice] = useState(0.0);
   const [quantity, setQuantity] = useState(0);
-  const [category, setCategory] = useState("");
   const [categoryTitle, setCategoryTitle] = useState("");
-
-  const openWidget = () => {
-    const widget = window.cloudinary.createUploadWidget(
-      {
-        cloudName: "devpor11z",
-        uploadPreset: "react-course",
-      },
-      (error, result) => {
-        if (result.event === "success") {
-          setImageURL(result.info.url);
-        }
-      }
-    );
-
-    widget.open();
-  };
 
   const getProduct = useCallback(async () => {
     const response = await fetch(
@@ -67,7 +43,6 @@ const EditProductPage = () => {
       setPrice(product.price);
       setQuantity(product.quantity);
       setTitle(product.title);
-      setCategory(product.category._id);
       setCategoryTitle(product.category.title);
     }
   }, [history, notifications, params]);
@@ -77,52 +52,34 @@ const EditProductPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const goBack = (e) => {
-    e.preventDefault();
-
-    history.goBack();
-}
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!title || !description || !imageURL) {
-      notifications.showMessage(
-        "Please provide product title, description and upload Image.",
-        "danger"
-      );
-      return;
-    }
-
     await executeAuthRequest(
       `http://localhost:8000/api/products/product?id=${params.id}`,
-      "PUT",
-      {
-        title,
-        description,
-        imageURL,
-        price,
-        quantity,
-        category,
-      },
+      "DELETE",
+      {},
       (product) => {
-        notifications.showMessage("Product changed successfully!", "success");
+        notifications.showMessage("Product removed successfully!", "success");
         history.push("/");
       },
       (error) => {
-        notifications.showMessage(
-          error,
-          "danger"
-        );
-        history.push(`/products/product-edit/${params.id}`);
+        notifications.showMessage(error, "danger");
+        history.push(`/products/product-delete/${params.id}`);
       }
     );
   };
 
+  const goBack = (e) => {
+      e.preventDefault();
+
+      history.goBack();
+  }
+
   return (
     <PageLayout>
       <CreateProductForm onSubmit={handleSubmit}>
-        <Title title="Edit product" />
+        <Title title="Delete product" />
         <hr />
         {imageURL ? (
           <img
@@ -132,44 +89,38 @@ const EditProductPage = () => {
             alt="Product representation"
           />
         ) : null}
-        <Input
+        <DisabledInput
           id="title"
           value={title}
           label="Title"
           onChange={(e) => setTitle(e.target.value)}
-        ></Input>
-        <TextAreaActive
+        ></DisabledInput>
+        <TextAreaDisabled
           id="description"
           value={description}
           label="Description"
           onChange={(e) => setDescription(e.target.value)}
-        ></TextAreaActive>
-        <UploadButton
-          title="Upload Image"
-          id="imageURL"
-          label="Image URL"
-          click={openWidget}
-        />
-        <Input
+        ></TextAreaDisabled>
+        <DisabledInput
           type="number"
           id="price"
           value={price}
           label="Price"
           onChange={(e) => setPrice(e.target.value)}
-        ></Input>
-        <Input
+        ></DisabledInput>
+        <DisabledInput
           type="number"
           id="quantity"
           value={quantity}
           label="Quantity"
           onChange={(e) => setQuantity(e.target.value)}
-        ></Input>
+        ></DisabledInput>
         <DisabledInput
           id="category"
           value={categoryTitle}
           label="Category"
         ></DisabledInput>
-        <SubmitButton title="Change product" goBack={goBack}/>
+        <SubmitButton title="Delete product" goBack={goBack}/>
       </CreateProductForm>
     </PageLayout>
   );
@@ -181,4 +132,4 @@ const CreateProductForm = styled.form`
   vertical-align: top;
 `;
 
-export default EditProductPage;
+export default DeleteProductPage;

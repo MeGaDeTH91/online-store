@@ -12,6 +12,7 @@ import LogoutPage from "./pages/logout";
 import CategoriesPage from "./pages/categories/all";
 import ProductDetailsPage from "./pages/products/details";
 import EditProductPage from "./pages/products/edit";
+import DeleteProductPage from "./pages/products/delete";
 
 const StoreNavigation = () => {
   const context = useContext(UserContext);
@@ -35,6 +36,9 @@ const StoreNavigation = () => {
         </Route>
         <Route exact path="/products/product-edit/:id">
           {authorizationSwitch(admin, <EditProductPage />, "/")}
+        </Route>
+        <Route exact path="/products/product-delete/:id">
+          {authorizationSwitch(admin, <DeleteProductPage />, "/")}
         </Route>
         <Route exact path="/categories/create">
           {authorizationSwitch(admin, <CreateCategoryPage />, "/")}

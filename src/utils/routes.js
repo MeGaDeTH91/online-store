@@ -1,7 +1,7 @@
 const getNavigationRoutes = (user) => {
   const adminLinks = [
     {
-      title: "Products",
+      title: "Explore Products",
       link: "/",
     },
     {
@@ -36,7 +36,7 @@ const getNavigationRoutes = (user) => {
 
   const authLinks = [
     {
-      title: "Products",
+      title: "Explore Products",
       link: "/",
     },
     {
@@ -59,11 +59,11 @@ const getNavigationRoutes = (user) => {
 
   const guestLinks = [
     {
-      title: "Products",
+      title: "Explore Products",
       link: "/",
     },
     {
-      title: "Shop by Category",
+      title: "Explore categories",
       link: "/categories/all",
     },
     {

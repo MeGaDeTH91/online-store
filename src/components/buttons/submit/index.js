@@ -1,27 +1,40 @@
 import React from "react";
 import styled from "styled-components";
+import GoBackButton from "../back";
 
-const SubmitButton = ({ title, onClick }) => {
+const SubmitButton = ({ title, goBack }) => {
   return (
-    <Button type="submit" onClick={onClick}>
-      {title}
-    </Button>
+    <div>
+      <FormControlDiv>
+        <span>
+          <FormButton type="submit">{title}</FormButton>
+          <GoBackButton onClick={goBack} />
+        </span>
+      </FormControlDiv>
+      
+    </div>
   );
 };
 
-const Button = styled.button`
+const FormControlDiv = styled.div`
+  width: 30%;
+  margin: 0 auto;
+  padding: 1%;
+  text-align: center;
+`;
+
+const FormButton = styled.button`
   background-color: #343a40;
   color: #b817a1;
   padding: 2%;
   width: auto;
   border-radius: 6px;
-  display: block;
+  display: inline-block;
   margin: 0 auto;
   border: none;
-  margin-top: 5.5%;
+  margin-top: 0.5%;
   border: 2px solid white;
   margin-bottom: 2%;
-  display: inline-block;
 
   &:hover {
     background-color: #17a2b8;

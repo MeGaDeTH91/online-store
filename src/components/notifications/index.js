@@ -3,7 +3,7 @@ import { Alert } from "react-bootstrap";
 import NotificationContext from "../../NotificationContext";
 import styles from './index.module.css'
 
-const Notification = () => {
+const PopUp = () => {
   const notificationContext = useContext(NotificationContext);
 
   const closeNotification = () => {
@@ -28,4 +28,4 @@ const Notification = () => {
   return notificationContext.status ? showNotification() : null;
 };
 
-export default Notification;
+export default PopUp;

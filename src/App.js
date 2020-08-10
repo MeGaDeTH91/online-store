@@ -42,7 +42,6 @@ const App = (props) => {
   useEffect(() => {
     const token = getCookie("x-auth-token");
 
-    
     if (!token) {
       logOut();
       setLoading(false);

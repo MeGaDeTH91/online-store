@@ -1,12 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-const TextArea = ({ id, label, value, onChange }) => {
-  
+const TextAreaDisabled = ({ id, label, value, onChange }) => {
   return (
     <FormControlDiv>
       <Label htmlFor={id}>{label}:</Label>
-      <TextAreaContainer value={value} onChange={onChange}></TextAreaContainer>
+      <TextAreaContainer value={value} disabled onChange={onChange}></TextAreaContainer>
     </FormControlDiv>
   );
 };
@@ -38,4 +37,4 @@ const Label = styled.label`
   text-align: right;
 `;
 
-export default TextArea;
+export default TextAreaDisabled;

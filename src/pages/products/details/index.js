@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import PageLayout from "../../../components/page-layout";
 import UserContext from "../../../UserContext";
 import AddToCartButton from "../../../components/buttons/add-to-cart";
-import AdminButtonGroup from "../../../components/buttons/button-group";
+import EditButton from "../../../components/buttons/edit";
+import DeleteButton from "../../../components/buttons/delete";
 
 class ProductDetailsPage extends Component {
   static contextType = UserContext;
@@ -32,25 +33,28 @@ class ProductDetailsPage extends Component {
   };
 
   editProduct = () => {
-    this.props.history.push(`/products/product-edit/${this.state.product._id}`)
-  }
+    this.props.history.push(`/products/product-edit/${this.state.product._id}`);
+  };
 
   deleteProduct = () => {
-    this.props.history.push(`/products/product-delete/${this.state.product._id}`)
-  }
+    this.props.history.push(
+      `/products/product-delete/${this.state.product._id}`
+    );
+  };
 
   addProductToCart = async (productId) => {
-      const response = await fetch(`http://localhost:8000/api/orders/addToCart?productId=${productId};userId=${this.context.user.id}`);
-      
-      if (!response.ok) {
-        this.props.history.push("/");
-      }
-  
-      const result = await response.json();
-  
-      console.log('Product details component: ', result);
-  }
+    const response = await fetch(
+      `http://localhost:8000/api/orders/addToCart?productId=${productId};userId=${this.context.user.id}`
+    );
 
+    if (!response.ok) {
+      this.props.history.push("/");
+    }
+
+    const result = await response.json();
+
+    console.log("Product details component: ", result);
+  };
 
   componentDidMount() {
     this.getProduct(this.props.match.params.id);
@@ -58,11 +62,11 @@ class ProductDetailsPage extends Component {
 
   render() {
     const { product } = this.state;
-    
+
     if (!product) {
-        return <PageLayout>Loading...</PageLayout>;
+      return <PageLayout>Loading...</PageLayout>;
     }
-    
+
     const { user } = this.context;
     const userIsAdministrator = user && user.isAdministrator;
     const userIsLogged = user && user.loggedIn;
@@ -81,8 +85,13 @@ class ProductDetailsPage extends Component {
               <h3 className="my-3">Product Description</h3>
               <p>{product.description}</p>
 
-              {userIsLogged ? <AddToCartButton onClick={e => this.addProductToCart(product._id)} /> : null}
-              {userIsAdministrator ? <AdminButtonGroup title="Product" editFunc={this.editProduct} deleteFunc={this.deleteProduct}></AdminButtonGroup> : null}
+              {userIsLogged ? (
+                <AddToCartButton
+                  onClick={(e) => this.addProductToCart(product._id)}
+                />
+              ) : null}
+              {userIsAdministrator ? (<EditButton title="Edit Product" onClick={this.editProduct}></EditButton>) : null}
+              {userIsAdministrator ? (<DeleteButton title="Delete Product" onClick={this.deleteProduct}></DeleteButton>) : null}
             </div>
           </div>
           <hr />

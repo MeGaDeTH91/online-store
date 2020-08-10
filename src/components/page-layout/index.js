@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import Header from "../../components/header";
 import Footer from "../../components/footer";
 import styles from "./index.module.css";
-import Notification from "../notification";
+import PopUp from "../notifications";
 
 const PageLayout = (props) => {
   const showNotification = () => {
-    return <Notification />;
+    return <PopUp />;
   };
 
   useEffect(() => {

@@ -7,6 +7,7 @@ import Input from "../../../components/input/active";
 import UploadButton from "../../../components/upload-button";
 import NotificationContext from "../../../NotificationContext";
 import executeAuthRequest from "../../../utils/executeAuthRequest";
+import SubmitButton from "../../../components/buttons/submit";
 
 const CreateCategoryPage = () => {
   const history = useHistory();
@@ -31,6 +32,12 @@ const CreateCategoryPage = () => {
     widget.open();
   };
 
+  const goBack = (e) => {
+    e.preventDefault();
+
+    history.goBack();
+  };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -83,9 +90,7 @@ const CreateCategoryPage = () => {
           label="Image URL"
           click={openWidget}
         />
-        <FormControlDiv>
-          <FormButton type="submit">{"Add category"}</FormButton>
-        </FormControlDiv>
+        <SubmitButton title="Add category" goBack={goBack}/>
       </CreateProductForm>
     </PageLayout>
   );
@@ -95,34 +100,6 @@ const CreateProductForm = styled.form`
   width: 83%;
   display: inline-block;
   vertical-align: top;
-`;
-
-const FormButton = styled.button`
-  background-color: #343a40;
-  color: #b817a1;
-  padding: 2%;
-  width: auto;
-  border-radius: 6px;
-  display: block;
-  margin: 0 auto;
-  border: none;
-  margin-top: 0.5%;
-  border: 2px solid white;
-  margin-bottom: 2%;
-
-  &:hover {
-    background-color: #17a2b8;
-    border: 2px solid #234465;
-    color: #b82c17;
-    font-style: italic;
-  }
-`;
-
-const FormControlDiv = styled.div`
-  width: 30%;
-  margin: 0 auto;
-  padding: 1%;
-  text-align: center;
 `;
 
 export default CreateCategoryPage;

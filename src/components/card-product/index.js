@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
 import TextLink from "../text-link";
-import SubmitButton from "../buttons/submit";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
+import styles from "./index.module.css";
 import UserContext from "../../UserContext";
-import AdminButtonGroup from "../buttons/button-group";
+import EditButton from "../buttons/edit";
+import DeleteButton from "../buttons/delete";
 
 const CardProduct = (props) => {
   const { productId, imageURL, title, price, category, quantity } = props;
@@ -27,7 +28,8 @@ const CardProduct = (props) => {
   };
 
   return (
-    <Card>
+    <Card >
+      <div className={styles.thumbnail} onClick={onDetails}>
       <CardImage src={imageURL} alt="Card image cap"></CardImage>
       <CardBody>
         <h4>
@@ -43,25 +45,21 @@ const CardProduct = (props) => {
           )}
         </h4>
         <hr />
+        <h3>{price}lv.</h3>
+        <p>{quantity} pieces left.</p>
+      </CardBody>
+      </div>
+      <br />
         <CardParagraph>
           <TextLink
-            title={category.title}
+            title={`Category: ${category.title}`}
             href={`/categories/category/${category._id}`}
           ></TextLink>
         </CardParagraph>
         <hr />
-        <h3>{price}lv.</h3>
-        <p>{quantity} pieces left.</p>
-      </CardBody>
       <CardFooter>
-        <SubmitButton title="Details" onClick={onDetails}></SubmitButton>
-        {userIsAdministrator ? (
-          <AdminButtonGroup
-            title="Product"
-            editFunc={editProduct}
-            deleteFunc={deleteProduct}
-          ></AdminButtonGroup>
-        ) : null}
+        {userIsAdministrator ? (<EditButton title="Edit Product" onClick={editProduct}></EditButton>) : null}
+        {userIsAdministrator ? (<DeleteButton  title="Delete Product" onClick={deleteProduct}></DeleteButton>) : null}
       </CardFooter>
     </Card>
   );
