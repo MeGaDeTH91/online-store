@@ -15,7 +15,6 @@ module.exports = {
     user(req, res, next) {
       User.findById(req.query.id)
         .populate("orders")
-        .populate("favorites")
         .populate('cart')
         .populate({
           path: "reviews",
