@@ -6,7 +6,6 @@ import CreateProductPage from "./pages/products/create";
 import CreateCategoryPage from "./pages/categories/create";
 import RegisterPage from "./pages/register";
 import LoginPage from "./pages/login";
-import ProfilePage from "./pages/profile";
 import UserContext from "./UserContext";
 import LogoutPage from "./pages/logout";
 import CategoriesPage from "./pages/categories/all";
@@ -14,9 +13,10 @@ import ProductDetailsPage from "./pages/products/details";
 import EditProductPage from "./pages/products/edit";
 import DeleteProductPage from "./pages/products/delete";
 import EditCategoryPage from "./pages/categories/edit";
-import UsersPage from "./pages/users";
+import UsersPage from "./pages/users/users-list";
 import CategoryProductsPage from "./pages/categories/products-list";
 import HomeFilteredPage from "./pages/home-filtered";
+import ProfileGuard from "./pages/profile-protection";
 
 const StoreNavigation = () => {
   const context = useContext(UserContext);
@@ -66,7 +66,10 @@ const StoreNavigation = () => {
           {authorizationSwitch(userIsLogged, <LogoutPage />, "/login")}
         </Route>
         <Route exact path="/profile/:id">
-          {authorizationSwitch(userIsLogged, <ProfilePage />, "/login")}
+          {authorizationSwitch(userIsLogged, <ProfileGuard path="details" />, "/login")}
+        </Route>
+        <Route exact path="/profile-edit/:id">
+          {authorizationSwitch(userIsLogged, <ProfileGuard path="edit" />, "/login")}
         </Route>
         <Route component={ErrorPage} />
       </Switch>

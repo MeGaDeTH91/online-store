@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
-import PageLayout from "../../components/page-layout";
-import NotificationContext from "../../NotificationContext";
+import PageLayout from "../../../components/page-layout";
+import NotificationContext from "../../../NotificationContext";
 import { useHistory } from "react-router-dom";
-import executeAuthGetRequest from "../../utils/executeAuthGETRequest";
-import Table from "../../components/tables/table";
-import usersImage from "../../images/user.jpg";
+import executeAuthGetRequest from "../../../utils/executeAuthGETRequest";
+import Table from "../../../components/tables/table";
+import usersImage from "../../../images/user.jpg";
 
 const UsersPage = () => {
   const notifications = useContext(NotificationContext);

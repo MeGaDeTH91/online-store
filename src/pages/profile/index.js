@@ -6,12 +6,15 @@ import executeAuthGetRequest from "../../utils/executeAuthGETRequest";
 import NotificationContext from "../../NotificationContext";
 import ListUserReviews from "../../components/user-reviews/user-list";
 import EditButton from "../../components/buttons/edit";
+import UserContext from "../../UserContext";
 
 const ProfilePage = () => {
   const notifications = useContext(NotificationContext);
+  const userContext = useContext(UserContext);
   const history = useHistory();
   const params = useParams();
-  
+  const correctUserIsLogged = userContext.user && userContext.user.loggedIn && userContext.user.id === params.id;
+
   const [user, setUser] = useState("");
   const [reviews, setReviews] = useState([]);
 
@@ -33,7 +36,7 @@ const ProfilePage = () => {
   };
 
   const editUser = () => {
-
+    history.push(`/profile-edit/${userContext.user.id}`);
   }
 
   useEffect(() => {
@@ -44,8 +47,6 @@ const ProfilePage = () => {
   if (!reviews) {
     return <PageLayout>Loading...</PageLayout>;
   }
-
-  const correctUserIsLogged = user && user.loggedIn && user.id === params.id;
 
   return (
     <PageLayout>
@@ -62,7 +63,7 @@ const ProfilePage = () => {
             <h3 className="my-3">Phone: {user.phone ? user.phone : 'Not provided'}</h3>
             {correctUserIsLogged ? (
                 <EditButton
-                  title="Edit Product"
+                  title="Update info"
                   onClick={editUser}
                 ></EditButton>
               ) : null}
