@@ -57,9 +57,12 @@ module.exports = {
             products: user.cart,
           }).then((order) => {
             user.cart.forEach((productId) => {
-              Product.updateOne({ _id: productId }, { $inc: { quantity: -1 } }).then();
+              Product.updateOne(
+                { _id: productId },
+                { $inc: { quantity: -1 } }
+              ).then();
             });
-            User.updateOne({ _id: userId }, {$set: {cart: [] }}).then();
+            User.updateOne({ _id: userId }, { $set: { cart: [] } }).then();
 
             return res.status(200).send(order);
           });
@@ -68,28 +71,34 @@ module.exports = {
     },
     addToCart(req, res, next) {
       const productId = req.query.productId;
-      const userId = req.query.userId;
+      const { userId } = req.body;
 
-      console.log('ProductId: ', productId);
-      console.log('userId: ', userId);
-
-      User.updateOne({ _id: userId }, { $push: { cart: productId } }).then((updatedUser) => {
-        console.log(updatedUser);
-        return res.status(200).send(updatedUser);
-      });
-      
-      User.findById(userId)
-        .populate("cart")
-        .then((user) => {
-          if (!user) {
-            return Promise.reject(new Error("No such user!"));
+      Promise.all([
+        Product.findById(productId).then((product) => {
+          if (!product || product.quantity < 1) {
+            return Promise.reject(new Error("No pieces of this product."));
           }
+        }),
+        User.updateOne({ _id: userId }, { $pull: { cart: productId } })
+      ])
+        .then(([]) => {
+          User.updateOne({ _id: userId }, { $push: { cart: productId } }).then(user => {
+            return res.status(200).send('"Success!"');
+          }).catch(err => { return Promise.reject(err)})
+          
+        })
+        .catch((err) => res.status(500).send(`"${err.message}"`));
+    },
+    removeFromCart(req, res, next) {
+      const productId = req.query.productId;
+      const { userId } = req.body;
 
-          Product.findById(productId)
-            .then((product) => {
-              
-            })
-            .catch((err) => res.status(500).send(`"${err.message}"`));
+      Promise.all([
+        Product.findById(productId),
+        User.updateOne({ _id: userId }, { $pull: { cart: productId } }),
+      ])
+        .then(([]) => {
+          return res.status(200).send('"Success!"');
         })
         .catch((err) => res.status(500).send(`"${err.message}"`));
     },

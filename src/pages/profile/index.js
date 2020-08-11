@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import PageLayout from "../../components/page-layout";
 import userImage from "../../images/user.jpg";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import executeAuthGetRequest from "../../utils/executeAuthGETRequest";
 import NotificationContext from "../../NotificationContext";
 import ListUserReviews from "../../components/user-reviews/user-list";
@@ -12,21 +12,23 @@ const ProfilePage = () => {
   const notifications = useContext(NotificationContext);
   const userContext = useContext(UserContext);
   const history = useHistory();
-  const params = useParams();
-  const correctUserIsLogged = userContext.user && userContext.user.loggedIn && userContext.user.id === params.id;
 
   const [user, setUser] = useState("");
   const [reviews, setReviews] = useState([]);
 
   const getUserInfo = async () => {
     await executeAuthGetRequest(
-      `http://localhost:8000/api/users/user?id=${params.id}`,
+      `http://localhost:8000/api/users/user?id=${userContext.user.id}`,
       (usersResponse) => {
         setUser(usersResponse);
 
         if (usersResponse.reviews && usersResponse.reviews.length) {
-          setReviews(usersResponse.reviews.sort((a, b) => ('' + b.created_at).localeCompare('' + a.created_at)));
-        } 
+          setReviews(
+            usersResponse.reviews.sort((a, b) =>
+              ("" + b.created_at).localeCompare("" + a.created_at)
+            )
+          );
+        }
       },
       (error) => {
         notifications.showMessage(error, "danger");
@@ -36,8 +38,8 @@ const ProfilePage = () => {
   };
 
   const editUser = () => {
-    history.push(`/profile-edit/${userContext.user.id}`);
-  }
+    history.push(`/profile-edit`);
+  };
 
   useEffect(() => {
     getUserInfo();
@@ -60,18 +62,15 @@ const ProfilePage = () => {
 
           <div className="col-md-4 text-center">
             <h3 className="my-3">Email: {user.email}</h3>
-            <h3 className="my-3">Phone: {user.phone ? user.phone : 'Not provided'}</h3>
-            {correctUserIsLogged ? (
-                <EditButton
-                  title="Update info"
-                  onClick={editUser}
-                ></EditButton>
-              ) : null}
+            <h3 className="my-3">
+              Phone: {user.phone ? user.phone : "Not provided"}
+            </h3>
+            <EditButton title="Update info" onClick={editUser}></EditButton>
           </div>
         </div>
         <hr />
         <div>
-          <h4 className="text-center">Product reviews</h4>
+          <h4 className="text-center">Recent product reviews</h4>
 
           {reviews && reviews.length ? (
             <ListUserReviews reviews={reviews} />

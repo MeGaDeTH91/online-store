@@ -1,5 +1,6 @@
 const Review = require("./Review");
 const Product = require("../products/Product");
+const User = require("../users/User");
 const { validationResult } = require("express-validator");
 
 module.exports = {
@@ -29,12 +30,25 @@ module.exports = {
             product,
           })
             .then((review) => {
-              Product.updateOne(
-                { _id: product },
-                { $push: { productReviews: review } }
-              ).then((updatedProduct) => {
-                return res.status(200).send(updatedProduct);
-              });
+              return Promise.all([
+                Product.updateOne(
+                  { _id: product },
+                  { $push: { productReviews: review } }
+                ),
+                User.updateOne(
+                  { _id: reviewer },
+                  { $push: { reviews: review } }
+                ),
+              ]);
+            })
+            .then(([updatedProduct, updatedUser]) => {
+              if (!updatedProduct || !updatedUser) {
+                return Promise.reject(
+                  new Error("Product was not removed successfully!")
+                );
+              }
+
+              return res.status(200).send(updatedProduct);
             })
             .catch((err) => {
               return res.status(401).send(`"${err.message}"`);

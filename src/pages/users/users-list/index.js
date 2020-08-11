@@ -36,27 +36,17 @@ const UsersPage = () => {
 
   return (
     <PageLayout>
+      <h1 className="my-4">Users management</h1>
+      <h4 className="my-3">Manage user roles and bans</h4>
+
+      <img className="img-fluid" src={usersImage} alt="Express" />
       <div className="container">
-        <h1 className="my-4">Users management</h1>
-
-        <div className="row">
-          <div className="col-md-8">
-            <img className="img-fluid" src={usersImage} alt="Express" />
-          </div>
-
-          <div className="col-md-4 text-center">
-            <h4 className="my-3">Manage user roles and bans</h4>
-          </div>
-        </div>
-        <hr />
-        <div>
-          <h4 className="text-center">Users</h4>
-          {users && users.length ? (
-            <Table users={users} />
-          ) : (
-            <p>No users in database.</p>
-          )}
-        </div>
+        <h4 className="text-center">Users</h4>
+        {users && users.length ? (
+          <Table users={users} />
+        ) : (
+          <p>No users in database.</p>
+        )}
       </div>
     </PageLayout>
   );

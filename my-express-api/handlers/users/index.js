@@ -16,6 +16,7 @@ module.exports = {
       User.findById(req.query.id)
         .populate("orders")
         .populate("favorites")
+        .populate('cart')
         .populate({
           path: "reviews",
           limit: 5,

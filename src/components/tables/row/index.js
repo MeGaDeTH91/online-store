@@ -50,7 +50,7 @@ const TableRow = ({ user, index }) => {
 
     history.push("/users");
     setTimeout(() => {
-        window.location.reload();
+      window.location.reload();
     }, 2000);
   };
 
@@ -71,9 +71,9 @@ const TableRow = ({ user, index }) => {
     );
 
     history.push("/users");
-    
+
     setTimeout(() => {
-        window.location.reload();
+      window.location.reload();
     }, 2000);
   };
 
@@ -82,7 +82,7 @@ const TableRow = ({ user, index }) => {
       <TD>{`${index + 1}.`}</TD>
       <TD>{user.email}</TD>
       <TD>{user.fullName}</TD>
-      {user.phone ? <TD>phone</TD> : <TD>Not provided</TD>}
+      {user.phone ? <TD>{user.phone}</TD> : <TD>Not provided</TD>}
       <TD>{userIsActive()}</TD>
       <TD>{userIsAdmin()}</TD>
       <TD>

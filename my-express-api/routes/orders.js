@@ -7,5 +7,6 @@ router.get("/userOrders", authenticate(), handler.get.userOrders);
 
 router.post("/createOrder", authenticate(), handler.post.createOrder);
 router.post("/addToCart", authenticate(), handler.post.addToCart);
+router.post("/removeFromCart", authenticate(), handler.post.removeFromCart);
 
 module.exports = router;

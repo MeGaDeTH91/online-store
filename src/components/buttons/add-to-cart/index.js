@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
-const AddToCartButton = ({ onClick }) => {
+const AddButton = ({ title, onClick }) => {
   return (
     <Button onClick={onClick}>
-      Add to cart
+      {title}
     </Button>
   );
 };
@@ -32,4 +32,4 @@ const Button = styled.button`
   }
 `;
 
-export default AddToCartButton;
+export default AddButton;

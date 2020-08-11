@@ -11,7 +11,7 @@ const TextAreaActive = ({ id, label, value, onChange }) => {
 };
 
 const FormControlDiv = styled.div`
-  width: 30%;
+  width: 33%;
   margin: 0 auto;
   padding: 1%;
   text-align: center;
@@ -22,9 +22,9 @@ const TextAreaContainer = styled.textarea`
   display: block;
   margin-left: auto;
   margin-right: auto;
-  resize: none;
+  resize: vertical;
   padding: 2%;
-  height: 11vh;
+  height: 15vh;
   font-style: italic;
   border-radius: 6px;
   border: 1px solid #234465;

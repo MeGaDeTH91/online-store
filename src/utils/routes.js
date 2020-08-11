@@ -22,11 +22,11 @@ const getNavigationRoutes = (user) => {
     },
     {
       title: "Profile",
-      link: `/profile/${user && user.id}`,
+      link: `/profile-details`,
     },
     {
       title: "ShoppingCart",
-      link: `/cart/${user && user.id}`,
+      link: `/shopping-cart`,
     },
     {
       title: "Logout",
@@ -45,11 +45,11 @@ const getNavigationRoutes = (user) => {
     },
     {
       title: "Profile",
-      link: `/profile/${user && user.id}`,
+      link: `/profile-details`,
     },
     {
       title: "ShoppingCart",
-      link: `/cart/${user && user.id}`,
+      link: `/shopping-cart`,
     },
     {
       title: "Logout",

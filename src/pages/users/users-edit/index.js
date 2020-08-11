@@ -3,12 +3,13 @@ import styled from "styled-components";
 import PageLayout from "../../../components/page-layout";
 import Title from "../../../components/title";
 import Input from "../../../components/input/active";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import NotificationContext from "../../../NotificationContext";
 import DisabledInput from "../../../components/input/disabled";
 import SubmitButton from "../../../components/buttons/submit";
 import executeAuthGetRequest from "../../../utils/executeAuthGETRequest";
 import executeAuthRequest from "../../../utils/executeAuthRequest";
+import UserContext from "../../../UserContext";
 
 const EditUserPage = () => {
   const [email, setEmail] = useState("");
@@ -16,8 +17,8 @@ const EditUserPage = () => {
   const [phone, setPhone] = useState("");
 
   const notifications = useContext(NotificationContext);
+  const userContext = useContext(UserContext);
   const history = useHistory();
-  const params = useParams();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -31,15 +32,14 @@ const EditUserPage = () => {
     }
 
     await executeAuthRequest(
-      `http://localhost:8000/api/users/user?id=${params.id}`,
+      `http://localhost:8000/api/users/user?id=${userContext.user.id}`,
       "PUT",
       {
         fullName,
         phone
       },
-      (product) => {
+      (user) => {
         notifications.showMessage("User information updated successfully!", "success");
-        history.push("/");
       },
       (error) => {
         notifications.showMessage(
@@ -49,12 +49,12 @@ const EditUserPage = () => {
         
       }
     );
-    history.push(`/profile/${params.id}`);
+    history.push(`/profile-details`);
   };
 
   const getUser = useCallback(async () => {
     await executeAuthGetRequest(
-      `http://localhost:8000/api/users/user?id=${params.id}`,
+      `http://localhost:8000/api/users/user?id=${userContext.user.id}`,
       (user) => {
         setEmail(user.email);
         setFullName(user.fullName);
@@ -65,7 +65,7 @@ const EditUserPage = () => {
         history.push("/");
       }
     );
-  }, [history, notifications, params]);
+  }, [history, notifications, userContext.user]);
 
   useEffect(() => {
     getUser();

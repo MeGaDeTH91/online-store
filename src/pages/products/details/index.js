@@ -1,10 +1,14 @@
 import React, { Component } from "react";
 import PageLayout from "../../../components/page-layout";
 import UserContext from "../../../UserContext";
-import AddToCartButton from "../../../components/buttons/add-to-cart";
+import AddButton from "../../../components/buttons/add-to-cart";
 import EditButton from "../../../components/buttons/edit";
 import DeleteButton from "../../../components/buttons/delete";
 import ListReviews from "../../../components/reviews/list";
+import styled from "styled-components";
+import TextAreaActive from "../../../components/textarea/active";
+import executeAuthRequest from "../../../utils/executeAuthRequest";
+import formatPrice from "../../../utils/priceFormatter";
 
 class ProductDetailsPage extends Component {
   static contextType = UserContext;
@@ -14,6 +18,8 @@ class ProductDetailsPage extends Component {
 
     this.state = {
       product: null,
+      show: false,
+      review: "",
       reviews: [],
     };
   }
@@ -31,7 +37,9 @@ class ProductDetailsPage extends Component {
 
     this.setState({
       product: result,
-      reviews: result.productReviews.sort((a, b) => ('' + b.created_at).localeCompare('' + a.created_at)),
+      reviews: result.productReviews.sort((a, b) =>
+        ("" + b.created_at).localeCompare("" + a.created_at)
+      ),
     });
   };
 
@@ -46,25 +54,102 @@ class ProductDetailsPage extends Component {
   };
 
   addProductToCart = async (productId) => {
-    const response = await fetch(
-      `http://localhost:8000/api/orders/addToCart?productId=${productId}`
+    const userId = this.context.user.id;
+
+    await executeAuthRequest(
+      `http://localhost:8000/api/orders/addToCart?productId=${productId}`,
+      "POST",
+      {
+        productId,
+        userId,
+      },
+      (product) => {
+        console.log("Product added successfully in shopping cart.");
+      },
+      (error) => {
+        console.log("Error: ", error);
+      }
     );
 
-    const userId = this.context.user.id;
-    console.log("Productdetails page: ", userId);
-
-    if (!response.ok) {
-      this.props.history.push("/");
-    }
-
-    const result = await response.json();
-
-    console.log("Product details component: ", result);
+    this.props.history.push("/");
   };
 
   componentDidMount() {
     this.getProduct(this.props.match.params.id);
   }
+
+  ReviewSection = () => (
+    <div id="results" className="search-results">
+      Some Results
+    </div>
+  );
+
+  showHiddenDiv = () => {
+    const { user } = this.context;
+    const userIsLogged = user && user.loggedIn;
+
+    return (
+      <div>
+        <h4 className="text-center">Product reviews</h4>
+
+        {userIsLogged ? (
+          <CreateProductForm onSubmit={this.handleSubmit}>
+            <h6 className="text-center">
+              You own this product? Please share your feedback...
+            </h6>
+            <TextAreaActive
+              id="review"
+              value={this.state.review}
+              label="Create review"
+              onChange={(e) => this.handleChange(e, "review")}
+            ></TextAreaActive>
+            <AddButton title="Post review" />
+          </CreateProductForm>
+        ) : null}
+
+        {this.state.reviews && this.state.reviews.length ? (
+          <ListReviews reviews={this.state.reviews} />
+        ) : (
+          <p> There are no reviews for this product yet.</p>
+        )}
+      </div>
+    );
+  };
+
+  handleSubmit = async (e) => {
+    e.preventDefault();
+
+    await executeAuthRequest(
+      `http://localhost:8000/api/reviews/create?id=${this.state.product._id}`,
+      "POST",
+      {
+        content: this.state.review,
+        reviewer: this.context.user.id,
+      },
+      (review) => {
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      },
+      (error) => {
+        console.log("Error: ", error);
+      }
+    );
+  };
+
+  handleChange = (event, type) => {
+    const newState = {};
+    newState[type] = event.target.value;
+
+    this.setState(newState);
+  };
+
+  toggleShow = () => {
+    const newState = {};
+    newState["show"] = !this.state.show;
+
+    this.setState(newState);
+  };
 
   render() {
     const { product } = this.state;
@@ -90,9 +175,12 @@ class ProductDetailsPage extends Component {
             <div className="col-md-4 text-center">
               <h3 className="my-3">Product Description</h3>
               <p>{product.description}</p>
+              <h3 className="my-3">Price: {formatPrice(product.price)}lv</h3>
+              <h6 className="my-3"><i>Pieces left: {product.quantity}</i></h6>
 
-              {userIsLogged ? (
-                <AddToCartButton
+              {userIsLogged && (product && product.quantity > 0 ) ? (
+                <AddButton
+                  title="Add to cart"
                   onClick={(e) => this.addProductToCart(product._id)}
                 />
               ) : null}
@@ -111,15 +199,21 @@ class ProductDetailsPage extends Component {
             </div>
           </div>
           <hr />
-          <div>
-            <h4 className="text-center">Product reviews</h4>
-            
-            {this.state.reviews && this.state.reviews.length ? (<ListReviews reviews={this.state.reviews} />) : <p> There are no reviews for this product yet.</p>}
-          </div>
+          {!this.state.show ? (
+            <AddButton title="Show reviews section" onClick={this.toggleShow} />
+          ) : (
+            this.showHiddenDiv()
+          )}
         </div>
       </PageLayout>
     );
   }
 }
+
+const CreateProductForm = styled.form`
+  width: 100%;
+  display: inline-block;
+  vertical-align: top;
+`;
 
 export default ProductDetailsPage;
