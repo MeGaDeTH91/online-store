@@ -16,7 +16,14 @@ module.exports = {
       User.findById(req.query.id)
         .populate("orders")
         .populate("favorites")
-        .populate("reviews")
+        .populate({
+          path: "reviews",
+          limit: 5,
+          populate: {
+            path: "product",
+            model: "Product",
+          },
+        })
         .lean()
         .then((user) => res.send(user))
         .catch((err) => res.status(500).send(`"${err.message}"`));

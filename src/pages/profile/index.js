@@ -1,70 +1,86 @@
-import React, { useContext, useState, useEffect, useCallback } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import PageLayout from "../../components/page-layout";
-import styled from "styled-components";
-import UserContext from "../../UserContext";
-import { useParams, useHistory } from "react-router-dom";
+import userImage from "../../images/user.jpg";
+import { useHistory, useParams } from "react-router-dom";
+import executeAuthGetRequest from "../../utils/executeAuthGETRequest";
+import NotificationContext from "../../NotificationContext";
+import ListUserReviews from "../../components/user-reviews/user-list";
+import EditButton from "../../components/buttons/edit";
 
 const ProfilePage = () => {
-  const [username, setUsername] = useState(null);
-  const [posts, setPosts] = useState(null);
-  const context = useContext(UserContext);
-  const params = useParams();
+  const notifications = useContext(NotificationContext);
   const history = useHistory();
+  const params = useParams();
+  
+  const [user, setUser] = useState("");
+  const [reviews, setReviews] = useState([]);
 
-  const logOut = () => {
-    context.logOut();
+  const getUserInfo = async () => {
+    await executeAuthGetRequest(
+      `http://localhost:8000/api/users/user?id=${params.id}`,
+      (usersResponse) => {
+        setUser(usersResponse);
 
-    history.push('/');
+        if (usersResponse.reviews && usersResponse.reviews.length) {
+          setReviews(usersResponse.reviews.sort((a, b) => ('' + b.created_at).localeCompare('' + a.created_at)));
+        } 
+      },
+      (error) => {
+        notifications.showMessage(error, "danger");
+        history.push("/");
+      }
+    );
+  };
+
+  const editUser = () => {
+
   }
-
-  const getUser = useCallback(async () => {
-    const response = await fetch(`http://localhost:9999/api/user?id=${params.userId}`);
-
-    if (!response.ok) {
-      history.push("/error");
-    } else {
-      const user = await response.json();
-
-      setUsername(user.username);
-      setPosts(user.posts && user.posts.length);
-    }
-  }, [params.userId, history]);
 
   useEffect(() => {
-    getUser()
-  }, [getUser])
+    getUserInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  if (!username) {
+  if (!reviews) {
     return <PageLayout>Loading...</PageLayout>;
   }
+
+  const correctUserIsLogged = user && user.loggedIn && user.id === params.id;
+
   return (
     <PageLayout>
-      <ProfileDiv>
-        <ProfileImage
-          src="https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png"
-          alt="profile-icon"
-        />
+      <div className="container">
+        <h1 className="my-4">{user.fullName}</h1>
+
+        <div className="row">
+          <div className="col-md-8">
+            <img className="img-fluid" src={userImage} alt="Express" />
+          </div>
+
+          <div className="col-md-4 text-center">
+            <h3 className="my-3">Email: {user.email}</h3>
+            <h3 className="my-3">Phone: {user.phone ? user.phone : 'Not provided'}</h3>
+            {correctUserIsLogged ? (
+                <EditButton
+                  title="Edit Product"
+                  onClick={editUser}
+                ></EditButton>
+              ) : null}
+          </div>
+        </div>
+        <hr />
         <div>
-        <p>User: {username}</p>
-        <p>Posts: {posts}</p>
-        <button onClick={logOut}>Logout</button>
+          <h4 className="text-center">Product reviews</h4>
+
+          {reviews && reviews.length ? (
+            <ListUserReviews reviews={reviews} />
+          ) : (
+            <p> There are no reviews from you yet.</p>
+          )}
+        </div>
       </div>
-      {/* <Origami length={3} /> */}
-      </ProfileDiv>
     </PageLayout>
   );
-}
+};
 
-const ProfileDiv = styled.div`
-  width: 83%;
-  display: inline-block;
-  vertical-align: top;
-  padding: 0.5%;
-`;
-
-const ProfileImage = styled.img`
-  width: 250px;
-  margin: 0 auto;
-  display: block;
-`;
 export default ProfilePage;

@@ -11,6 +11,7 @@ import NotificationContext from "../../NotificationContext";
 const RegisterPage = () => {
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
 
@@ -36,6 +37,7 @@ const RegisterPage = () => {
       {
         email,
         fullName,
+        phone,
         password,
         rePassword
       },
@@ -68,6 +70,12 @@ const RegisterPage = () => {
           value={fullName}
           label="Full Name"
           onChange={(e) => setFullName(e.target.value)}
+        ></Input>
+        <Input
+          id="phone"
+          value={phone}
+          label="Phone"
+          onChange={(e) => setPhone(e.target.value)}
         ></Input>
         <Input
           type="password"
