@@ -57,7 +57,7 @@ class ProductDetailsPage extends Component {
     const userId = this.context.user.id;
 
     await executeAuthRequest(
-      `http://localhost:8000/api/orders/addToCart?productId=${productId}`,
+      `http://localhost:8000/api/orders/add-to-cart?productId=${productId}`,
       "POST",
       {
         productId,

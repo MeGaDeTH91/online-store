@@ -41,6 +41,10 @@ const ProfilePage = () => {
     history.push(`/profile-edit`);
   };
 
+  const myOrders = () => {
+    history.push('/my-orders');
+  }
+
   useEffect(() => {
     getUserInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -66,6 +70,7 @@ const ProfilePage = () => {
               Phone: {user.phone ? user.phone : "Not provided"}
             </h3>
             <EditButton title="Update info" onClick={editUser}></EditButton>
+            <EditButton title="My orders" onClick={myOrders}></EditButton>
           </div>
         </div>
         <hr />

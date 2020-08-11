@@ -5,17 +5,19 @@ import { useHistory } from "react-router-dom";
 import executeAuthGetRequest from "../../utils/executeAuthGETRequest";
 import UserContext from "../../UserContext";
 import ShoppingCartTable from "../../components/tables/shopping-cart";
+import AddButton from "../../components/buttons/add-to-cart";
+import executeAuthRequest from "../../utils/executeAuthRequest";
 
 const ShoppingCartPage = () => {
   const userContext = useContext(UserContext);
   const notifications = useContext(NotificationContext);
   const history = useHistory();
 
-  const [user, setUser] = useState('');
+  const [user, setUser] = useState("");
 
   const getUser = async () => {
     await executeAuthGetRequest(
-      `http://localhost:8000/api/users/user?id=${userContext.user.id}`,
+      `http://localhost:8000/api/orders/user-cart?userId=${userContext.user.id}`,
       (userResponse) => {
         setUser(userResponse);
       },
@@ -24,6 +26,27 @@ const ShoppingCartPage = () => {
         history.push("/users");
       }
     );
+  };
+
+  const submitOrder = async () => {
+    await executeAuthRequest(
+      `http://localhost:8000/api/orders/create-order?userId=${userContext.user.id}`,
+      "POST",
+      {
+        userId: userContext.user.id
+      },
+      (usersResponse) => {
+        notifications.showMessage("Order placed successfully!", "success");
+      },
+      (error) => {
+        notifications.showMessage(error, "danger");
+      }
+    );
+
+    history.push("/shopping-cart");
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
   };
 
   useEffect(() => {
@@ -43,7 +66,13 @@ const ShoppingCartPage = () => {
         <hr />
         <br />
         {user.cart && user.cart.length ? (
-          <ShoppingCartTable products={user.cart} />
+          <div>
+            <ShoppingCartTable products={user.cart} />
+            <AddButton
+              title="Place order"
+              onClick={submitOrder}
+            />
+          </div>
         ) : (
           <p>No products in your cart.</p>
         )}
