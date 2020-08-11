@@ -13,17 +13,24 @@ module.exports = {
         .lean()
         .then((user) => {
           if (user) {
-            return res.status(200).send(user);
+            return res.status(200).send(user.cart);
           }
           return res.status(404).send(`"No such user!"`);
         })
         .catch((err) => res.status(500).send(`"${err.message}"`));
     },
     userOrders(req, res, next) {
-      const userId = req.query.id;
+      const userId = req.query.userId;
 
       User.findById(userId)
-        .populate("orders")
+        .populate({
+          path: "orders",
+          limit: 10,
+          populate: {
+            path: "products",
+            model: "Product",
+          },
+        })
         .lean()
         .then((user) => {
           if (user) {

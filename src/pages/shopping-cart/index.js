@@ -13,13 +13,13 @@ const ShoppingCartPage = () => {
   const notifications = useContext(NotificationContext);
   const history = useHistory();
 
-  const [user, setUser] = useState("");
+  const [cart, setCart] = useState([]);
 
-  const getUser = async () => {
+  const getUserCart = async () => {
     await executeAuthGetRequest(
       `http://localhost:8000/api/orders/user-cart?userId=${userContext.user.id}`,
-      (userResponse) => {
-        setUser(userResponse);
+      (userCart) => {
+        setCart(userCart);
       },
       (error) => {
         notifications.showMessage(error, "danger");
@@ -50,11 +50,11 @@ const ShoppingCartPage = () => {
   };
 
   useEffect(() => {
-    getUser();
+    getUserCart();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!user) {
+  if (!cart) {
     return <PageLayout>Loading...</PageLayout>;
   }
 
@@ -65,9 +65,9 @@ const ShoppingCartPage = () => {
         <h1>Your shopping cart</h1>
         <hr />
         <br />
-        {user.cart && user.cart.length ? (
+        {cart && cart.length ? (
           <div>
-            <ShoppingCartTable products={user.cart} />
+            <ShoppingCartTable products={cart} />
             <AddButton
               title="Place order"
               onClick={submitOrder}

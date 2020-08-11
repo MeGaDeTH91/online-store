@@ -19,6 +19,7 @@ import HomeFilteredPage from "./pages/home-filtered";
 import ProfilePage from "./pages/profile";
 import EditUserPage from "./pages/users/users-edit";
 import ShoppingCartPage from "./pages/shopping-cart";
+import OrdersPage from "./pages/orders";
 
 const StoreNavigation = () => {
   const context = useContext(UserContext);
@@ -75,6 +76,9 @@ const StoreNavigation = () => {
         </Route>
         <Route exact path="/shopping-cart">
           {authorizationSwitch(userIsLogged, <ShoppingCartPage />, "/login")}
+        </Route>
+        <Route exact path="/my-orders">
+          {authorizationSwitch(userIsLogged, <OrdersPage />, "/login")}
         </Route>
         <Route component={ErrorPage} />
       </Switch>
