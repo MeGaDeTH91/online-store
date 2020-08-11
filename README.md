@@ -1,9 +1,18 @@
 <h3><i>Title: </i><b>React Store</b> - great choice for your sales.</h3>
 
-<i>Brief introduction: </i>
-<h6>React store is simple solution for publishing, managing and selling <br />
-your products with user-friendly UI. </h6>
-In the project directory, you can run:
+<i>Introduction: </i>
+React store is simple solution for publishing, managing and selling your products with user-friendly UI.
+The main goal is to make each seller's products available globally. The online store can be accessed as guest, 
+registered user with standard privileges and there is also administrative area.
+
+<i>Technologies: </i>
+The application consists two parts - back-end REST API, based on Express.js and front-end application,
+based on the amazing React library. 
+
+<i>Launch settings: </i>
+The REST API is located in the 'my-express-api' folder, navigate there with command prompt, powershell or 
+any other suitable command-line and execute 'npm start'. This will start the REST API on 
+[http://localhost:8000](http://localhost:8000)
 
 ### `npm start`
 
