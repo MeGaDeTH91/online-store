@@ -17,9 +17,9 @@ DB_URL=mongodb+srv://{specify username}:{specify password}@aws-8thve.mongodb.net
 COOKIE_KEY={your cookie key}<br>
 PRIVATE_KEY={your private key}<br>
 Then navigate to the folder with command prompt, powershell or
-any other suitable command-line and execute 'npm start'. This will start the REST API on
+any other suitable command-line and execute ### 'npm install'.then('npm start').catch(check your internet connection :) ). This will start the REST API on
 [http://localhost:{port}](http://localhost:{port})
-Next, in the project root folder, in separate command-line window run the same 'npm start' command and
+Next, in the project root folder, in separate command-line window run the same ### 'npm install' and 'npm start' command and
 this will start the React app on [http://localhost:3000](http://localhost:3000)
 After that, it is up to you :)
 
