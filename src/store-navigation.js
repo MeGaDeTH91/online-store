@@ -23,7 +23,7 @@ import OrdersPage from "./pages/orders";
 
 const StoreNavigation = () => {
   const context = useContext(UserContext);
-  const userIsLogged = context.user.loggedIn;
+  const userIsLogged = context.user && context.user.loggedIn;
   const admin = userIsLogged && context.user.isAdministrator;
 
   const authorizationSwitch = (requiredPrivilege, page, redirectRoute) => {
