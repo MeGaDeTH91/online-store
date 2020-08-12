@@ -29,7 +29,7 @@ Cypress is used for more complex End-to-End testing with > 85% functionality cov
 
 ### <i>Table of contents: </i><br>
 1. Public part:<br> 
-  * Guest users can access home page with all products listed, page with listed categories so user can browse products by category, register, login pages and search by title option.<br>
+    * Guest users can access home page with all products listed, page with listed categories so user can browse products by category, register, login pages and search by title option.<br>
 2. Private part:<br>
-  * Standard user – can access all public functionalities plus adding products to shopping cart, finalizing order and viewing order history, exploring, edition of profile details.<br>User is able to share feedback by writing reviews.
-  * Administrator – can access all functionalities, which standart user is able to, plus adding, editing and removing products, also adding and editing categories. Administrators can manage users and give administrative privileges or ban(deactivate) user accounts.
+    * Standard user – can access all public functionalities plus adding products to shopping cart, finalizing order and viewing order history, exploring, edition of profile details. User is able to share feedback by writing reviews.
+    * Administrator – can access all functionalities, which standart user is able to, plus adding, editing and removing products, also adding and editing categories. Administrators can manage users and give administrative privileges or ban(deactivate) user accounts.
