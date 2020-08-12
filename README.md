@@ -10,14 +10,14 @@ The application consists two parts - back-end REST API, based on Express.js and 
 based on the amazing React library.
 
 <i>Launch settings: </i>
-The REST API is located in the 'my-express-api' folder, in which .env should be put with this info:
-PORT={specifiy port}
-DB_URL=mongodb+srv://{specify username}:{specify password}@aws-8thve.mongodb.net/{your database name}?retryWrites=true&w=majority
-COOKIE_KEY={your cookie key}
-PRIVATE_KEY={your private key}
+The REST API is located in the 'my-express-api' folder, in which .env should be put with this info:<br>
+PORT={specifiy port}<br>
+DB_URL=mongodb+srv://{specify username}:{specify password}@aws-8thve.mongodb.net/{your database name}?retryWrites=true&w=majority<br>
+COOKIE_KEY={your cookie key}<br>
+PRIVATE_KEY={your private key}<br>
 Then navigate to the folder with command prompt, powershell or
 any other suitable command-line and execute 'npm start'. This will start the REST API on
-[http://localhost:{specified port}](http://localhost:{specified port})
+[http://localhost:{port}](http://localhost:{port})
 Next, in the project root folder, in separate command-line window run the same 'npm start' command and
 this will start the React app on [http://localhost:3000](http://localhost:3000)
 After that, is up to you :)
