@@ -24,8 +24,10 @@ this will start the React app on [http://localhost:3000](http://localhost:3000)
 After that, it is up to you :)
 
 ### <i>Testing</i>
-Cypress is used for more complex End-to-End with > 85% functionality coverage. Can be started with 'npm run test:e2e' from the root directory.
-There are also some basic unit tests with React testing library. These tests can be started with 'npm run test' from the root directory.
+Cypress is used for more complex End-to-End testing with > 85% functionality coverage. Can be started with<br>
+'npm run test:e2e' from the root directory.
+There are also some basic unit tests with React testing library. These tests can be started with <br>
+'npm run test' from the root directory.
 
 ### <i>Table of contents: </i>
 1 Public part – guest users can access home page with all products listed, page with listed categories so user can browse products by category, register, login pages and search by title option.
