@@ -1,3 +1,4 @@
+<img src="https://res.cloudinary.com/devpor11z/image/upload/v1597228588/nqmxfnsgbjtasmipxum7.png" alt="react-store-logo" />
 <h3><i>Title: </i><b>React Store</b> - great choice for your sales.</h3>
 
 <i>Introduction: </i>
@@ -10,7 +11,7 @@ The application consists two parts - back-end REST API, based on Express.js and 
 based on the amazing React library.
 
 <i>Launch settings: </i>
-The REST API is located in the 'my-express-api' folder, in which .env should be put with this info:<br>
+The REST API is located in the 'my-express-api' folder, in which .env file should be put with this info:<br>
 PORT={specifiy port}<br>
 DB_URL=mongodb+srv://{specify username}:{specify password}@aws-8thve.mongodb.net/{your database name}?retryWrites=true&w=majority<br>
 COOKIE_KEY={your cookie key}<br>
@@ -20,7 +21,7 @@ any other suitable command-line and execute 'npm start'. This will start the RES
 [http://localhost:{port}](http://localhost:{port})
 Next, in the project root folder, in separate command-line window run the same 'npm start' command and
 this will start the React app on [http://localhost:3000](http://localhost:3000)
-After that, is up to you :)
+After that, it is up to you :)
 
 <i>Table of contents: </i>
 1 Public part – guest users can access home page with all products listed, page with listed categories so user can browse products by category, register, login pages and search by title option.
