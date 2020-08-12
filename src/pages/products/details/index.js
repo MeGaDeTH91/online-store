@@ -186,13 +186,13 @@ class ProductDetailsPage extends Component {
               ) : null}
               {userIsAdministrator ? (
                 <EditButton
-                  title="Edit Product"
+                  title="Edit product"
                   onClick={this.editProduct}
                 ></EditButton>
               ) : null}
               {userIsAdministrator ? (
                 <DeleteButton
-                  title="Delete Product"
+                  title="Delete product"
                   onClick={this.deleteProduct}
                 ></DeleteButton>
               ) : null}

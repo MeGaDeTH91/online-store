@@ -38,7 +38,7 @@ const CardProduct = (props) => {
       <hr />
       {userIsAdministrator ? (
         <CardFooter
-          title="Product"
+          title="product"
           editProduct={editProduct}
           deleteProduct={deleteProduct}
         />

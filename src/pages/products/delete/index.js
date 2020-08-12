@@ -79,14 +79,14 @@ const DeleteProductPage = () => {
   return (
     <PageLayout>
       <CreateProductForm onSubmit={handleSubmit}>
-        <Title title="Delete product" />
+        <Title title="Delete Product" />
         <hr />
         {imageURL ? (
           <img
             src={imageURL}
             width="50%"
             height="50%"
-            alt="Product representation"
+            alt="Product visual representation will appear here."
           />
         ) : null}
         <DisabledInput

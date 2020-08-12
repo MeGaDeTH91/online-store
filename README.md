@@ -1,7 +1,7 @@
 <img src="https://res.cloudinary.com/devpor11z/image/upload/v1597228588/nqmxfnsgbjtasmipxum7.png" alt="react-store-logo" />
-<h3><i>Title: </i><b>React Store</b> - great choice for your sales.</h3>
+<h3><i>Title: </i><br><b>React Store</b> - great choice for your sales.</h3>
 
-### <i>Introduction: </i>
+### <i>Introduction: </i><br>
 React store is simple solution for publishing, managing and selling your products with user-friendly UI.
 The main goal is to make each seller's products available globally. The online store can be accessed as guest,
 registered user with standard privileges and there is also administrative area.
@@ -10,7 +10,7 @@ registered user with standard privileges and there is also administrative area.
 The application consists two parts - back-end REST API, based on Express.js and front-end application,
 based on the amazing React library.
 
-### <i>Launch settings: </i>
+### <i>Launch settings: </i><br>
 The REST API is located in the 'my-express-api' folder, in which .env file should be put with this info:<br>
 PORT={specifiy port}<br>
 DB_URL=mongodb+srv://{specify username}:{specify password}@aws-8thve.mongodb.net/{your database name}?retryWrites=true&w=majority<br>
@@ -23,13 +23,11 @@ Next, in the project root folder, in separate command-line window run the same '
 this will start the React app on [http://localhost:3000](http://localhost:3000)
 After that, it is up to you :)
 
-### <i>Testing</i>
+### <i>Testing</i><br>
 Cypress is used for more complex End-to-End testing with > 85% functionality coverage. Can be started with<br>
-'npm run test:e2e' from the root directory.
-There are also some basic unit tests with React testing library. These tests can be started with <br>
-'npm run test' from the root directory.
+'npm run test:e2e' from the project root directory.<br>
 
-### <i>Table of contents: </i>
+### <i>Table of contents: </i><br>
 1 Public part – guest users can access home page with all products listed, page with listed categories so user can browse products by category, register, login pages and search by title option.
 1.2 Private part:
 1.2.1 Standard user – can access all public functionalities plus adding products to shopping cart, finalizing order and viewing order history, exploring, edition of profile details. User is able to share feedback by writing reviews.

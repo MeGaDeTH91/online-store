@@ -35,6 +35,7 @@ const Header = () => {
             type="text"
             placeholder="Search Product..."
             className="mr-sm-2"
+            name="search"
             onChange={(e) => setSearch(e.target.value)}
           />
           <Button type='submit' onClick={searchProducts} variant="outline-info">Search</Button>

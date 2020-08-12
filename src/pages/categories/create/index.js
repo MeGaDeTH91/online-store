@@ -74,7 +74,7 @@ const CreateCategoryPage = () => {
             src={imageURL}
             width="50%"
             height="50%"
-            alt="Product representation"
+            alt="Product visual representation will appear here"
           />
         ) : null}
         <Input
@@ -87,6 +87,8 @@ const CreateCategoryPage = () => {
           title="Upload Image"
           id="imageURL"
           label="Image URL"
+          onChange={(e) => setImageURL(e.target.value)}
+          value={imageURL}
           click={openWidget}
         />
         <SubmitButton title="Add category" goBack={goBack}/>

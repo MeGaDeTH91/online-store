@@ -1,15 +1,25 @@
 import React from "react";
 import styled from "styled-components";
 
-const UploadButton = ({ id, label, title, click }) => {
+const UploadButton = ({ id, label, value, onChange, title, click }) => {
   
   return (
     <FormControlDiv>
       <Label htmlFor={id}>{label}:</Label>
+      <InputField type='text' name={id} id={id} onChange={onChange} value={value} />
       <UploadBtn type="button" id={id} onClick={click} >{title}</UploadBtn>
     </FormControlDiv>
   );
 };
+
+const InputField = styled.input`
+  text-align: center;
+  border: 1px solid #234465;
+  padding: 1%;
+  width: 50%;
+  border-radius: 6px;
+  color: #343a40;
+`;
 
 const FormControlDiv = styled.div`
   width: 30%;
@@ -25,11 +35,11 @@ const UploadBtn = styled.button`
   width: auto;
   border-radius: 6px;
   display: block;
-  margin: 0 auto;
+  margin-top: 300px;
+  margin-left: 190px;
   border: none;
   margin-top: 0.5%;
   border: 2px solid white;
-  margin-bottom: 2%;
 
   &:hover {
     background-color: #17a2b8;

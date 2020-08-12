@@ -23,7 +23,7 @@ const RegisterPage = () => {
     event.preventDefault();
 
     if (!email || !fullName || !password || !rePassword) {
-      notifications.showMessage('Please provide email, full name, password and confirmation password.', 'danger');
+      notifications.showMessage('Email, full name, password and confirmation password should be more than 2 characters.', 'danger');
       return;
     }
 
@@ -49,7 +49,7 @@ const RegisterPage = () => {
       },
       (error) => {
         console.log("Error", error);
-        notifications.showMessage('Please provide another email.', 'danger');
+        notifications.showMessage('Email, full name, password and confirmation password should be more than 2 characters.', 'danger');
       }
     );
   };

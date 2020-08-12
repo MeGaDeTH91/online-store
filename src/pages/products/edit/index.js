@@ -1,9 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useContext,
-} from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import PageLayout from "../../../components/page-layout";
@@ -81,7 +76,7 @@ const EditProductPage = () => {
     e.preventDefault();
 
     history.goBack();
-}
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -110,10 +105,7 @@ const EditProductPage = () => {
         history.push("/");
       },
       (error) => {
-        notifications.showMessage(
-          error,
-          "danger"
-        );
+        notifications.showMessage(error, "danger");
         history.push(`/products/product-edit/${params.id}`);
       }
     );
@@ -129,7 +121,7 @@ const EditProductPage = () => {
             src={imageURL}
             width="50%"
             height="50%"
-            alt="Product representation"
+            alt="Product visual representation will appear here"
           />
         ) : null}
         <Input
@@ -148,6 +140,8 @@ const EditProductPage = () => {
           title="Upload Image"
           id="imageURL"
           label="Image URL"
+          onChange={(e) => setImageURL(e.target.value)}
+          value={imageURL}
           click={openWidget}
         />
         <Input
@@ -169,7 +163,7 @@ const EditProductPage = () => {
           value={categoryTitle}
           label="Category"
         ></DisabledInput>
-        <SubmitButton title="Change product" goBack={goBack}/>
+        <SubmitButton title="Change product" goBack={goBack} />
       </CreateProductForm>
     </PageLayout>
   );

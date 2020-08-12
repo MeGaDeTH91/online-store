@@ -63,7 +63,7 @@ const getNavigationRoutes = (user) => {
       link: "/",
     },
     {
-      title: "Explore categories",
+      title: "Explore Categories",
       link: "/categories/all",
     },
     {

@@ -125,6 +125,8 @@ const EditCategoryPage = () => {
           title="Upload Image"
           id="imageURL"
           label="Image URL"
+          onChange={(e) => setImageURL(e.target.value)}
+          value={imageURL}
           click={openWidget}
         />
         <SubmitButton title="Change category" goBack={goBack}/>

@@ -135,10 +135,14 @@ module.exports = {
       const userId = req.query.id;
       const { fullName, phone } = req.body;
 
+      if (!fullName || fullName.length < 3) {
+        return res.status(400).send('"Full name should be at least 3 characters long!"');
+      }
+
       User.updateOne({ _id: userId }, { fullName, phone })
         .then((updatedUser) => res.send(updatedUser))
         .catch((err) => {
-          return res.status(500).send(err.message);
+          return res.status(500).send(`"${err.message}"`);
         });
     },
     changeRole(req, res, next) {

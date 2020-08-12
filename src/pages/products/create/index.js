@@ -17,7 +17,7 @@ const CreateProductPage = () => {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [imageURL, setImageURL] = useState(null);
+  const [imageURL, setImageURL] = useState("");
   const [price, setPrice] = useState(0.0);
   const [quantity, setQuantity] = useState(0);
   const [categoryTitle, setCategoryTitle] = useState("Choose category");
@@ -101,10 +101,7 @@ const CreateProductPage = () => {
         history.push("/");
       },
       (error) => {
-        notifications.showMessage(
-          error,
-          "danger"
-        );
+        notifications.showMessage(error, "danger");
         history.push("/products/create");
       }
     );
@@ -120,7 +117,7 @@ const CreateProductPage = () => {
             src={imageURL}
             width="50%"
             height="50%"
-            alt="Product representation"
+            alt="Product visual representation will appear here"
           />
         ) : null}
         <Input
@@ -139,6 +136,8 @@ const CreateProductPage = () => {
           title="Upload Image"
           id="imageURL"
           label="Image URL"
+          onChange={(e) => setImageURL(e.target.value)}
+          value={imageURL}
           click={openWidget}
         />
         <Input

@@ -15,6 +15,7 @@ describe("Home page", () => {
   it("Should show products correctly!", () => {
     cy.get("h1").contains("Products");
     cy.get("div").contains("Ibanez RG550");
+    cy.get("div").contains("Jackson SL2");
   });
 
   it("sets auth cookie when logging in via form submission", function () {
@@ -31,5 +32,10 @@ describe("Home page", () => {
     cy.get("h1").contains("Products");
     cy.get("div").contains("Ibanez RG550");
     cy.get("div").contains("Jackson SL2");
+  });
+
+  it("Should show footer correctly!", () => {
+    cy.get("footer").should("be.visible");
+    cy.get('p').contains('React-Store © 2020');
   });
 });
