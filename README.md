@@ -11,13 +11,13 @@ based on the amazing React library.
 
 <i>Launch settings: </i>
 The REST API is located in the 'my-express-api' folder, in which .env should be put with this info:
-PORT=<specifiy port>
-DB_URL=mongodb+srv://<username>:<password>@aws-8thve.mongodb.net/<dbname>?retryWrites=true&w=majority
-COOKIE_KEY=<your cookie key>
-PRIVATE_KEY=<your private key>
+PORT={specifiy port}
+DB_URL=mongodb+srv://{specify username}:{specify password}@aws-8thve.mongodb.net/{your database name}?retryWrites=true&w=majority
+COOKIE_KEY={your cookie key}
+PRIVATE_KEY={your private key}
 Then navigate to the folder with command prompt, powershell or
 any other suitable command-line and execute 'npm start'. This will start the REST API on
-[http://localhost:<specified port>](http://localhost:<specified port>)
+[http://localhost:{specified port}](http://localhost:{specified port})
 Next, in the project root folder, in separate command-line window run the same 'npm start' command and
 this will start the React app on [http://localhost:3000](http://localhost:3000)
 After that, is up to you :)
