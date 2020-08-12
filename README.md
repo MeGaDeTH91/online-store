@@ -28,7 +28,8 @@ Cypress is used for more complex End-to-End testing with > 85% functionality cov
 'npm run test:e2e' from the project root directory.<br>
 
 ### <i>Table of contents: </i><br>
-1 Public part – guest users can access home page with all products listed, page with listed categories so user can browse products by category, register, login pages and search by title option.
-1.2 Private part:
-1.2.1 Standard user – can access all public functionalities plus adding products to shopping cart, finalizing order and viewing order history, exploring, edition of profile details. User is able to share feedback by writing reviews.
-1.2.2 Administrator – can access all functionalities, which standart user is able to, plus adding, editing and removing products, also adding and editing categories. Administrators can manage users and give administrative privileges or ban(deactivate) user accounts.
+1. Public part:<br> 
+  * Guest users can access home page with all products listed, page with listed categories so user can browse products by category, register, login pages and search by title option.<br>
+2. Private part:<br>
+  * Standard user – can access all public functionalities plus adding products to shopping cart, finalizing order and viewing order history, exploring, edition of profile details.<br>User is able to share feedback by writing reviews.
+  * Administrator – can access all functionalities, which standart user is able to, plus adding, editing and removing products, also adding and editing categories. Administrators can manage users and give administrative privileges or ban(deactivate) user accounts.
