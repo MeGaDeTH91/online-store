@@ -6,7 +6,7 @@ const Input = ({ id, label, type, value, onChange, disabled }) => {
   return (
     <FormControlDiv>
       <Label htmlFor={id}>{label}:</Label>
-      <InputField type={type || 'text'} id={id} value={value} onChange={onChange} />
+      <InputField type={type || 'text'} id={id} name={id} value={value} onChange={onChange} />
     </FormControlDiv>
   );
 };

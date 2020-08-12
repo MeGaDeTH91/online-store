@@ -6,7 +6,7 @@ const DisabledInput = ({ id, label, type, value }) => {
   return (
     <FormControlDiv>
       <Label htmlFor={id}>{label}:</Label>
-      <InputField type={type || 'text'} disabled id={id} value={value} />
+      <InputField type={type || 'text'} disabled name={id} id={id} value={value} />
     </FormControlDiv>
   );
 };

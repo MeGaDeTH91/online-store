@@ -5,7 +5,7 @@ const TextAreaDisabled = ({ id, label, value, onChange }) => {
   return (
     <FormControlDiv>
       <Label htmlFor={id}>{label}:</Label>
-      <TextAreaContainer value={value} disabled onChange={onChange}></TextAreaContainer>
+      <TextAreaContainer value={value} name={id} disabled onChange={onChange}></TextAreaContainer>
     </FormControlDiv>
   );
 };

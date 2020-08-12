@@ -5,7 +5,7 @@ const TextAreaActive = ({ id, label, value, onChange }) => {
   return (
     <FormControlDiv>
       <Label htmlFor={id}>{label}:</Label>
-      <TextAreaContainer value={value} onChange={onChange}></TextAreaContainer>
+      <TextAreaContainer value={value} name={id} onChange={onChange}></TextAreaContainer>
     </FormControlDiv>
   );
 };
