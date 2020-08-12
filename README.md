@@ -17,13 +17,13 @@ DB_URL=mongodb+srv://{specify username}:{specify password}@aws-8thve.mongodb.net
 COOKIE_KEY={your cookie key}<br>
 PRIVATE_KEY={your private key}<br>
 Then navigate to the folder with command prompt, powershell or
-any other suitable command-line and execute ### 'npm install'.then('npm start').catch(check your internet connection :) ). This will start the REST API on
+any other suitable command-line and execute 'npm install'.then('npm start').catch(check your internet connection :) ). This will start the REST API on
 [http://localhost:{port}](http://localhost:{port})
-Next, in the project root folder, in separate command-line window run the same ### 'npm install' and 'npm start' command and
+Next, in the project root folder, in separate command-line window run the same 'npm install' and 'npm start' command and
 this will start the React app on [http://localhost:3000](http://localhost:3000)
 After that, it is up to you :)
 
-<i>Table of contents: </i>
+### <i>Table of contents: </i>
 1 Public part – guest users can access home page with all products listed, page with listed categories so user can browse products by category, register, login pages and search by title option.
 1.2 Private part:
 1.2.1 Standard user – can access all public functionalities plus adding products to shopping cart, finalizing order and viewing order history, exploring, edition of profile details. User is able to share feedback by writing reviews.
