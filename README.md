@@ -29,7 +29,7 @@ Cypress is used for more complex End-to-End testing with > 85% functionality cov
 
 ### <i>Hosting: </i><br>
 The application is hosted on Heroku and can be found on the following link:<br>
-[https://vast-eyrie-11496.herokuapp.com](https://vast-eyrie-11496.herokuapp.com)
+[https://vast-eyrie-11496.herokuapp.com](https://vast-eyrie-11496.herokuapp.com) <br>
 The REST API is hosted also on Heroku and can be found on the following link:<br>
 [https://express-js-rest.herokuapp.com](https://express-js-rest.herokuapp.com)
 
