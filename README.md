@@ -20,12 +20,16 @@ Then navigate to the folder with command prompt, powershell or
 any other suitable command-line and execute 'npm install'.then('npm start').catch(check your internet connection :) ). This will start the REST API on
 [http://localhost:{port}](http://localhost:{port})
 Next, in the project root folder, in separate command-line window run the same 'npm install' and 'npm start' command and
-this will start the React app on [http://localhost:3000](http://localhost:3000)
+this will start the React app on 
 After that, it is up to you :)
 
-### <i>Testing</i><br>
+### <i>Testing: </i><br>
 Cypress is used for more complex End-to-End testing with > 85% functionality coverage. Can be started with<br>
 'npm run test:e2e' from the project root directory.<br>
+
+### <i>Hosting: </i><br>
+The application is hosted on Heroku and can be found on the following link:<br>
+[https://vast-eyrie-11496.herokuapp.com/](https://vast-eyrie-11496.herokuapp.com/)
 
 ### <i>Table of contents: </i><br>
 1. Public part:<br> 
